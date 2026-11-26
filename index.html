@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sokin Nafas — Stressni boshqarish amaliy platformasi</title>
+<meta name="description" content="Andijon davlat universiteti magistrlik tadqiqoti uchun stressni boshqarish mashqlari va psixologik testlar platformasi.">
+<meta name="theme-color" content="#FFFCFA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1F26" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%236F8F7A'/%3E%3Cpath d='M12 36c6-8 14-8 20 0s14 8 20 0' fill='none' stroke='%23FFFCFA' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN TOKENS (Master_prompt_dizayn.md, 3-bo'lim)
+   ========================================================= */
+:root{
+  --bg:#FFFCFA; --surface:#FFFFFF; --surface-warm:#F7F0E8;
+  --text:#3A3C48; --text-muted:#6B6976; --border:#D9D3CC;
+  --accent:#A5593C; --accent-hover:#8A4730; --accent-soft:#F3E3DA; --on-accent:#FCF8F8;
+  --calm:#5E7F69; --calm-soft:#E6EFE8;
+  --info:#4F799C; --info-soft:#E3ECF3;
+  --warn:#9A6516; --alert:#A33A3A;
+  --footer-bg:#3A3C48; --footer-text:#ECE7E1;
+  --shadow-hover:0 8px 24px rgba(58,60,72,.08);
+  --r-sm:10px; --r-md:16px; --r-lg:20px; --r-pill:999px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  --maxw:1080px; --readw:680px;
+  --f-head:"Fraunces", Georgia, "Times New Roman", serif;
+  --f-body:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-ui:"Inter Tight", "Inter", system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme: light;
+}
+[data-theme="dark"]{
+  --bg:#1E1F26; --surface:#262833; --surface-warm:#2E3040;
+  --text:#ECE7E1; --text-muted:#B3ADB8; --border:#41434F;
+  --accent:#D9896A; --accent-hover:#E6A285; --accent-soft:#3D2E2A; --on-accent:#1E1F26;
+  --calm:#93B59E; --calm-soft:#2A3530;
+  --info:#8CB4D6; --info-soft:#26323D;
+  --warn:#E0B062; --alert:#E08C8C;
+  --footer-bg:#15161B; --footer-text:#ECE7E1;
+  --shadow-hover:0 8px 24px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--f-body);
+  font-size:clamp(16px,1.2vw + 12px,18px);line-height:1.6;hyphens:auto;
+  transition:background-color .3s var(--ease),color .3s var(--ease)}
+h1,h2,h3{font-family:var(--f-head);font-weight:500;letter-spacing:-.01em;line-height:1.2;margin:0 0 var(--s3)}
+h1{font-size:clamp(32px,3vw + 18px,44px)} h2{font-size:clamp(26px,2vw + 16px,36px)} h3{font-size:clamp(20px,.6vw + 17px,24px)}
+p{margin:0 0 var(--s4)}
+a{color:var(--info)}
+img,svg{max-width:100%}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:var(--text);color:var(--bg);padding:8px 14px;border-radius:var(--r-pill);z-index:100}
+.skip:focus{left:8px}
+:focus-visible{outline:2px solid var(--info);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s5)}
+.read{max-width:var(--readw);margin:0 auto}
+.eyebrow{font-family:var(--f-ui);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--info);font-weight:500;margin-bottom:var(--s3)}
+.muted{color:var(--text-muted)}
+.small{font-size:14px}
+.center{text-align:center}
+.stack>*+*{margin-top:var(--s4)}
+.row{display:flex;gap:var(--s3);flex-wrap:wrap;align-items:center}
+.hidden{display:none!important}
+
+/* ---------- Buttons ---------- */
+.btn{font-family:var(--f-ui);font-weight:500;font-size:15px;line-height:1.2;border-radius:var(--r-pill);
+  padding:12px 24px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid transparent;cursor:pointer;text-decoration:none;transition:background .2s,color .2s,transform .1s,border-color .2s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-outline{background:transparent;color:var(--accent);border-color:var(--accent)}
+.btn-outline:hover{background:var(--accent-soft)}
+.btn-calm{background:var(--calm);color:var(--bg)}
+.btn-ghost{background:transparent;color:var(--text);padding:12px 14px}
+.btn-ghost:hover{background:var(--surface-warm)}
+.btn-sm{font-size:13px;padding:7px 14px;min-height:36px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn .arr{transition:transform .2s var(--ease)}
+.btn:hover .arr,.link-arrow:hover .arr{transform:translateX(3px)}
+.icon-btn{width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--border);background:var(--surface);color:var(--text);display:inline-grid;place-items:center;cursor:pointer}
+.icon-btn:hover{background:var(--surface-warm)}
+.spinner{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:0;z-index:40;background:var(--bg);transition:background .3s,box-shadow .3s}
+.site-header.scrolled{background:color-mix(in srgb,var(--bg) 80%,transparent);box-shadow:0 1px 0 var(--border)}
+@supports (backdrop-filter:blur(12px)){.site-header.scrolled{backdrop-filter:blur(12px)}}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding-top:14px;padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.brand-name{font-family:var(--f-ui);font-weight:600;font-size:19px;line-height:1.1}
+.brand-owner{font-size:12.5px;color:var(--text-muted);line-height:1.3;max-width:420px}
+.hdr-actions{display:flex;align-items:center;gap:var(--s2)}
+.band{background:var(--surface-warm)}
+.band .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:10px;padding-bottom:10px;gap:var(--s3)}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-pill);padding:4px;gap:2px;overflow-x:auto;max-width:100%}
+.seg button{font-family:var(--f-ui);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;border:0;background:transparent;color:var(--text);padding:9px 16px;border-radius:var(--r-pill);cursor:pointer;white-space:nowrap;min-height:38px}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.stage-pill{font-family:var(--f-ui);font-size:13px;color:var(--text-muted)}
+@media (max-width:768px){
+  .brand-owner{display:none}
+  .band{display:none}
+  .hdr-actions .btn-primary{display:none}
+}
+
+/* ---------- Bottom tab bar (mobile) ---------- */
+.tabbar{display:none}
+@media (max-width:768px){
+  .tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;z-index:45;
+    background:color-mix(in srgb,var(--surface) 92%,transparent);border-top:1px solid var(--border);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  @supports (backdrop-filter:blur(12px)){.tabbar{backdrop-filter:blur(12px)}}
+  .tabbar button{background:none;border:0;color:var(--text-muted);font-family:var(--f-ui);font-size:11.5px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;min-height:52px;cursor:pointer;border-radius:12px}
+  .tabbar button[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
+  main{padding-bottom:84px}
+}
+body.focus-mode .tabbar,body.focus-mode .site-header,body.focus-mode .site-footer{display:none}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.aurora{position:absolute;inset:-20%;z-index:-2;filter:blur(60px);opacity:.75;
+  background:
+   radial-gradient(40% 50% at 20% 30%, color-mix(in srgb,var(--calm) 45%,transparent), transparent 70%),
+   radial-gradient(35% 45% at 80% 20%, color-mix(in srgb,var(--accent) 30%,transparent), transparent 70%),
+   radial-gradient(45% 55% at 60% 80%, color-mix(in srgb,var(--surface-warm) 90%,transparent), transparent 70%),
+   radial-gradient(30% 40% at 90% 70%, color-mix(in srgb,var(--info) 25%,transparent), transparent 70%);
+  animation:drift 28s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(-4%,3%,0) rotate(8deg)}100%{transform:translate3d(3%,-2%,0) rotate(-6deg)}}
+.grain{position:absolute;inset:0;z-index:-1;opacity:.08;mix-blend-mode:multiply;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+[data-theme="dark"] .grain{mix-blend-mode:screen;opacity:.05}
+.hero-inner{padding:var(--s9) 0 var(--s8);max-width:720px}
+.hero h1{font-size:clamp(34px,3.6vw + 16px,52px)}
+.hero p.lead{font-size:clamp(17px,.5vw + 15px,19px);color:var(--text-muted);max-width:620px}
+.hero-horizon{position:absolute;bottom:0;left:0;right:0;height:120px;z-index:-1;opacity:.5}
+
+/* ---------- Sections ---------- */
+section.sec{padding:var(--s8) 0}
+.sec-head{margin-bottom:var(--s6)}
+.sec-head p{color:var(--text-muted);margin:0}
+.grid{display:grid;gap:var(--s5)}
+.g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:960px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.g3,.g2,.g4{grid-template-columns:1fr}}
+.more{margin-top:var(--s6);text-align:center}
+
+/* Timeline */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4);counter-reset:st}
+.steps li{list-style:none;position:relative;padding:var(--s5);border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface)}
+.steps li::before{counter-increment:st;content:counter(st);font-family:var(--f-head);font-size:28px;color:var(--accent);display:block;margin-bottom:6px}
+.steps{padding:0;margin:0}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* ---------- Cards ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.card-vis{aspect-ratio:16/9;position:relative;display:block}
+.card-vis svg{width:100%;height:100%;display:block}
+.card-body{padding:var(--s5);display:flex;flex-direction:column;gap:var(--s2);flex:1}
+.card-meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-ui);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--info)}
+.card-meta .dur{color:var(--text-muted);text-transform:none;letter-spacing:0}
+.card h3{font-size:20px;margin:0}
+.card p{font-size:15px;color:var(--text-muted);margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:var(--s3)}
+.badge{font-family:var(--f-ui);font-size:12px;padding:4px 10px;border-radius:var(--r-pill);background:var(--calm-soft);color:var(--calm);font-weight:600}
+.tip{position:relative;display:inline-flex}
+.tip>button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--info);cursor:pointer;font-family:var(--f-ui);font-weight:600}
+.tip .tip-box{position:absolute;bottom:120%;right:-8px;width:260px;background:var(--text);color:var(--bg);font-size:13px;line-height:1.45;padding:10px 12px;border-radius:12px;opacity:0;pointer-events:none;transform:translateY(4px);transition:.2s;z-index:5}
+.tip:hover .tip-box,.tip:focus-within .tip-box{opacity:1;transform:none}
+
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s5)}
+.chip{font-family:var(--f-ui);font-size:14px;border:1px solid var(--border);background:transparent;color:var(--text);padding:8px 14px;border-radius:var(--r-pill);cursor:pointer;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--calm-soft);color:var(--calm);border-color:var(--calm);font-weight:600}
+
+/* Video cards */
+.vthumb{aspect-ratio:16/9;position:relative;background:var(--surface-warm);display:grid;place-items:center;overflow:hidden}
+.vthumb svg.bgart{position:absolute;inset:0;width:100%;height:100%}
+.play{position:relative;width:60px;height:60px;border-radius:50%;background:color-mix(in srgb,var(--bg) 88%,transparent);display:grid;place-items:center;border:0;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.play svg{width:22px;height:22px;margin-left:3px;fill:var(--accent)}
+.dchip{position:absolute;right:10px;bottom:10px;background:rgba(30,31,38,.72);color:#fff;font-family:var(--f-ui);font-size:12px;padding:3px 8px;border-radius:8px}
+.soon{position:absolute;left:10px;top:10px;background:var(--surface);color:var(--text-muted);font-family:var(--f-ui);font-size:12px;padding:3px 10px;border-radius:var(--r-pill);border:1px solid var(--border)}
+.vprog{height:4px;background:var(--border)}
+.vprog i{display:block;height:100%;background:var(--calm);width:0}
+.vframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media (max-width:640px){.vcarousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:var(--s4);padding-bottom:var(--s2)}
+  .vcarousel>.card{flex:0 0 82%;scroll-snap-align:start}}
+
+/* Skeleton */
+.skel{background:linear-gradient(90deg,var(--surface-warm),var(--bg),var(--surface-warm));background-size:200% 100%;animation:sk 1.4s ease infinite}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* ---------- Forms / questionnaire ---------- */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(20px,4vw,40px)}
+label.lbl{display:block;font-family:var(--f-ui);font-weight:600;font-size:15px;margin-bottom:6px}
+.inp,select.inp{width:100%;font:inherit;font-size:17px;padding:12px 14px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg);color:var(--text);min-height:48px}
+.inp:focus{outline:2px solid var(--info);outline-offset:1px}
+.field{margin-bottom:var(--s5)}
+.err{color:var(--alert);font-size:14px;margin-top:6px}
+.opts{display:grid;gap:var(--s2)}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;min-height:52px}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-checked="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.opt .num{font-family:var(--f-ui);font-weight:600;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--surface-warm);flex:0 0 auto}
+.opt[aria-checked="true"] .num{background:var(--accent);color:var(--on-accent)}
+.opt .chk{margin-left:auto;opacity:0}
+.opt[aria-checked="true"] .chk{opacity:1}
+.scale-row{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.scale-row .opt{flex-direction:column;justify-content:center;padding:10px 4px;gap:2px}
+.scale-row .opt .num{width:auto;height:auto;background:none;font-size:18px}
+.scale-row .opt[aria-checked="true"] .num{background:none;color:var(--accent)}
+.anchors{display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-top:6px;gap:var(--s4)}
+.qbar{height:6px;background:var(--surface-warm);border-radius:var(--r-pill);overflow:hidden;margin:var(--s3) 0 var(--s5)}
+.qbar i{display:block;height:100%;background:var(--accent);transition:width .3s var(--ease)}
+.sticky-actions{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:var(--s5) 0 var(--s4);display:flex;justify-content:space-between;gap:var(--s3)}
+@media (max-width:768px){.sticky-actions{bottom:72px}}
+.placeholder-txt{background:var(--info-soft);color:var(--info);border-radius:8px;padding:2px 6px;font-size:.9em}
+
+/* Result */
+.score-big{font-family:var(--f-head);font-size:64px;line-height:1;color:var(--text)}
+.bandbar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;margin:var(--s4) 0 var(--s2);position:relative}
+.bandbar span{height:12px;border-radius:6px}
+.bandbar .b0{background:var(--calm-soft)} .bandbar .b1{background:color-mix(in srgb,var(--warn) 30%,var(--bg))} .bandbar .b2{background:color-mix(in srgb,var(--alert) 25%,var(--bg))}
+.marker{position:absolute;top:-6px;width:4px;height:24px;background:var(--text);border-radius:2px;transform:translateX(-2px)}
+.band-labels{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;font-size:13px;color:var(--text-muted)}
+.note{border-left:4px solid var(--calm);background:var(--calm-soft);padding:var(--s4) var(--s5);border-radius:0 var(--r-md) var(--r-md) 0}
+.note.warm{border-color:var(--accent);background:var(--accent-soft)}
+
+/* ---------- Player ---------- */
+.player{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--s6) var(--s5);text-align:center;position:relative;overflow:hidden;isolation:isolate}
+.player .aurora{opacity:.45}
+.player-top{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center}
+.breath-wrap{position:relative;width:min(78vw,340px);aspect-ratio:1;margin:var(--s6) 0;display:grid;place-items:center}
+.ring{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4}
+.ring .track{stroke:var(--border)} .ring .prog{stroke:var(--calm);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.orb{width:46%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--calm) 55%,var(--bg)),var(--calm));
+  box-shadow:0 0 0 18px color-mix(in srgb,var(--calm) 14%,transparent),0 0 0 40px color-mix(in srgb,var(--calm) 7%,transparent);
+  transform:scale(.7);transition-property:transform;transition-timing-function:ease-in-out}
+.phase{font-family:var(--f-head);font-size:clamp(24px,3vw+14px,34px);min-height:1.3em}
+.guide{max-width:560px;font-size:clamp(18px,.6vw+16px,21px);line-height:1.65;min-height:6.5em}
+.ptimer{font-family:var(--f-ui);color:var(--text-muted);font-variant-numeric:tabular-nums}
+.journal textarea{width:100%;min-height:140px;font:inherit;padding:14px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg);color:var(--text)}
+.mood{width:100%;max-width:480px}
+input[type=range]{width:100%;accent-color:var(--accent);height:36px}
+.mood-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted)}
+.mood-val{font-family:var(--f-head);font-size:40px;color:var(--accent)}
+.safety{font-size:13px;color:var(--text-muted);max-width:520px}
+
+/* ---------- Dashboard ---------- */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4)}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--s5)}
+.tile .k{font-family:var(--f-ui);font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}
+.tile .v{font-family:var(--f-head);font-size:40px;line-height:1.1;margin-top:6px}
+.tile.wide{grid-column:span 2} .tile.tall{grid-row:span 2}
+@media (max-width:860px){.bento{grid-template-columns:repeat(2,1fr)}}
+.ringwrap{display:flex;align-items:center;gap:var(--s5)}
+.prog-ring circle{fill:none;stroke-width:10}
+.hist{list-style:none;padding:0;margin:0}
+.hist li{display:flex;justify-content:space-between;gap:var(--s3);padding:10px 0;border-bottom:1px solid var(--border);font-size:15px}
+
+/* ---------- Admin ---------- */
+.tbl-wrap{overflow:auto;max-height:60vh;border:1px solid var(--border);border-radius:var(--r-md)}
+table.tbl{border-collapse:collapse;width:100%;font-size:14px}
+.tbl th,.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.tbl th{position:sticky;top:0;background:var(--surface-warm);font-family:var(--f-ui)}
+
+/* ---------- Footer ---------- */
+.site-footer{background:var(--footer-bg);color:var(--footer-text);margin-top:var(--s8)}
+.site-footer a{color:var(--footer-text)}
+.foot{display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--s6);padding-top:var(--s8);padding-bottom:var(--s6)}
+.foot h4{font-family:var(--f-ui);font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin:0 0 var(--s3)}
+.foot ul{list-style:none;margin:0;padding:0} .foot li{margin-bottom:8px}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:var(--s4);padding-bottom:var(--s4);font-size:13px;opacity:.75}
+@media (max-width:760px){.foot{grid-template-columns:1fr}}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:var(--r-pill);font-family:var(--f-ui);font-size:14px;z-index:90;transition:.3s var(--ease);pointer-events:none;max-width:90vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:768px){.toast{bottom:92px}}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+  .orb{transform:scale(.85)!important}
+}
+.reduced .orb{transition:none!important;transform:scale(.85)!important}
+.reduced .aurora{animation:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Asosiy mazmunga o'tish</a>
+
+<header class="site-header" id="hdr">
+  <div class="wrap hdr">
+    <a class="brand" href="#/" aria-label="Sokin Nafas — bosh sahifa">
+      <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="var(--calm)"/><path d="M12 36c6-8 14-8 20 0s14 8 20 0" fill="none" stroke="var(--bg)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="22" r="4" fill="var(--bg)" opacity=".85"/></svg>
+      <span>
+        <span class="brand-name" data-cfg="siteName">Sokin Nafas</span><br>
+        <span class="brand-owner" data-cfg="ownerLine"></span>
+      </span>
+    </a>
+    <div class="hdr-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Tungi rejimni almashtirish" title="Tungi / kunduzgi rejim">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </button>
+      <a class="btn btn-ghost" href="#/kirish" id="loginLink">Kirish</a>
+      <a class="btn btn-primary" href="#/rozilik" id="startBtn">Boshlash</a>
+    </div>
+  </div>
+  <div class="band">
+    <div class="wrap">
+      <nav class="seg" aria-label="Asosiy bo'limlar">
+        <button data-go="#/mashqlar">Mashqlar</button>
+        <button data-go="#/videolar">Videolar</button>
+        <button data-go="#/testlar">Testlar</button>
+        <button data-go="#/kundalik">Kundalik</button>
+      </nav>
+      <span class="stage-pill" id="stagePill" aria-live="polite"></span>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1"></main>
+
+<footer class="site-footer">
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="color:var(--footer-text)">
+        <svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="#ECE7E1" stroke-width="3"/><path d="M12 36c6-8 14-8 20 0s14 8 20 0" fill="none" stroke="#ECE7E1" stroke-width="4" stroke-linecap="round"/></svg>
+        <span class="brand-name" data-cfg="siteName">Sokin Nafas</span>
+      </div>
+      <p class="small" style="margin-top:12px;opacity:.85" data-cfg="ownerLine"></p>
+      <p class="small" style="opacity:.85" data-cfg="supervisorLine"></p>
+      <p class="small" style="opacity:.7">Bu platforma ilmiy tadqiqot uchun yaratilgan. U tibbiy yoki psixologik davolash o'rnini bosmaydi.</p>
+    </div>
+    <div>
+      <h4>Bo'limlar</h4>
+      <ul><li><a href="#/mashqlar">Mashqlar</a></li><li><a href="#/videolar">Videolar</a></li><li><a href="#/testlar">Testlar</a></li><li><a href="#/kundalik">Mening kundaligim</a></li></ul>
+    </div>
+    <div>
+      <h4>Ma'lumot</h4>
+      <ul><li><a href="#/rozilik">Rozilik shartlari</a></li><li><a href="#/maxfiylik">Maxfiylik</a></li><li><a href="#/boglanish">Bog'lanish</a></li></ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom"><span data-cfg="siteName">Sokin Nafas</span> · <span id="yearNow"></span> · Andijon davlat universiteti</div>
+</footer>
+
+<nav class="tabbar" aria-label="Mobil menyu">
+  <button data-go="#/"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Bosh sahifa</button>
+  <button data-go="#/mashqlar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>Mashqlar</button>
+  <button data-go="#/videolar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/></svg>Videolar</button>
+  <button data-go="#/kundalik"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Kundalik</button>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   CONFIG — tadqiqotchi faqat shu qismni tahrirlaydi
+   [KVADRAT QAVS] ichidagilar to'ldirilishi shart.
+   ========================================================= */
+const CONFIG = {
+  siteName: "Sokin Nafas",
+  siteSubtitle: "Stressni boshqarish amaliy platformasi",
+  ownerLine: "Akbarov Husanjon — Andijon davlat universiteti, Psixologiya yo'nalishi, 2-kurs magistranti",
+  supervisorLine: "Ilmiy rahbar: PhD, dots. M.X. Dumarov",
+  dissertation: "Stressni boshqarishda mobil texnologiyalar va ularning amaliy-psixologik imkoniyatlari",
+  contact: { phone: "[telefon raqami]", email: "[e-pochta]", psychologist: "[maktab/universitet psixologi bilan bog'lanish]" },
+  appVersion: "1.0.0",
+
+  // Google Apps Script web app manzili (README, 2-qadam). Bo'sh bo'lsa, ma'lumotlar qurilmada navbatda saqlanadi.
+  apiUrl: "",
+
+  // Tadqiqot dizayni: "cross-sectional" | "pre-post" | "two-group"  — ilmiy rahbar bilan tanlang
+  design: "pre-post",
+  programDays: 21,          // [asoslang: masalan 21 yoki 28 kun]
+  followUpDays: 28,         // T2 kuzatuv o'lchovi; 0 = kuzatuvsiz
+  weeklyGoalSessions: 5,    // [tavsiya: haftasiga 5 marta, kamida 10 daqiqadan]
+  minorsIncluded: false,    // 18 yoshgacha ishtirokchilar bo'lsa true -> ota-ona roziligi maydoni
+  codePattern: "^P\\d{3}$", // anonim kod formati: P001–P999
+  // Ikki guruhli dizaynda nazorat guruhi kodlari (kutish ro'yxati). Ro'yxat faqat siz bilan qoladi.
+  controlCodes: [],
+  ethicsApproval: "",       // Etika ruxsati raqami bo'lsa yozing; bo'lmasa bo'sh qoldiring (hech narsa da'vo qilinmaydi)
+
+  // Qaysi bosqichda qaysi testlar
+  battery: {
+    T0: ["PSM25","PSS10","MAAS","WHO5","VASS"],
+    T1: ["PSM25","PSS10","MAAS","WHO5","SUS"],
+    T2: ["PSM25","PSS10","WHO5"]
+  },
+
+  /* ---------- METODIKALAR ----------
+     DIQQAT: savol matnlari ataylab BO'SH. Ularni asl qo'llanmadan so'zma-so'z kiriting.
+     "keyNote" — kalitni asl manba bilan tasdiqlang. "bands" — faqat qo'llanmadagi chegara ballar (bet raqami bilan).
+  */
+  instruments: {
+    PSM25: {
+      name: "Psixologik stress shkalasi (PSM-25)",
+      author: "L. Lemyre, R. Tessier, L. Fillion; rus tilidagi moslashtirish: N.E. Vodopyanova",
+      source: "Lemyre L., Tessier R. Measuring psychological stress // Canadian Family Physician. – 2003. – Vol. 49. – P. 1159–1168; Водопьянова Н.Е. Психодиагностика стресса. – СПб.: Питер, 2009.",
+      enabled: true, itemCount: 25,
+      instructions: "[Qo'llanmadagi yo'riqnomani kiriting]",
+      responseScale: { min: 1, max: 8, labels: [], minLabel: "[min yorlig'i]", maxLabel: "[max yorlig'i]" },
+      items: [], reverseItems: [], subscales: {}, scoring: "sum",
+      keyNote: "8 ballik shkala asl manbaga ko'ra. Teskari bandlar va chegara ballarni qo'llanmadan tekshiring.",
+      bands: [],  // masalan: [{max: 99, label:"Past"}, {max:154,label:"O'rtacha"}, {max:200,label:"Yuqori"}]  — FAQAT qo'llanmadan
+      licenseNote: "Mualliflar ruxsati talab qilinadi."
+    },
+    PSS10: {
+      name: "Idrok etilgan stress shkalasi (PSS-10)",
+      author: "S. Cohen, T. Kamarck, R. Mermelstein (1983)",
+      source: "Cohen S., Kamarck T., Mermelstein R. A global measure of perceived stress // Journal of Health and Social Behavior. – 1983. – Vol. 24, № 4. – P. 385–396.",
+      enabled: true, itemCount: 10,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 0, max: 4, labels: [], minLabel: "[0 yorlig'i]", maxLabel: "[4 yorlig'i]" },
+      items: [], reverseItems: [4,5,7,8], subscales: {}, scoring: "sum",
+      keyNote: "Teskari bandlar 4, 5, 7, 8 – asl manba bilan tasdiqlang.",
+      bands: [], licenseNote: "Notijorat tadqiqot uchun bepul."
+    },
+    MAAS: {
+      name: "Ongli e'tibor shkalasi (MAAS)",
+      author: "K.W. Brown, R.M. Ryan (2003)",
+      source: "Brown K.W., Ryan R.M. // Journal of Personality and Social Psychology. – 2003. – Vol. 84, № 4. – P. 822–848.",
+      enabled: true, itemCount: 15,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 1, max: 6, labels: [], minLabel: "[1 yorlig'i]", maxLabel: "[6 yorlig'i]" },
+      items: [], reverseItems: [], subscales: {}, scoring: "mean",
+      keyNote: "O'rtacha ball; yuqori ball – yuqori ongli e'tibor. Manbadan tasdiqlang.",
+      bands: [], licenseNote: "Tadqiqot uchun bepul (tasdiqlang)."
+    },
+    WHO5: {
+      name: "JSST-5 farovonlik indeksi (WHO-5)",
+      author: "World Health Organization",
+      source: "Topp C.W. va boshq. The WHO-5 Well-Being Index // Psychotherapy and Psychosomatics. – 2015. – Vol. 84, № 3. – P. 167–176.",
+      enabled: true, itemCount: 5,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 0, max: 5, labels: [], minLabel: "[0 yorlig'i]", maxLabel: "[5 yorlig'i]" },
+      items: [], reverseItems: [], subscales: {}, scoring: "who5",
+      keyNote: "Xom ball 0–25, ×4 = 0–100 foiz. Manbadan tasdiqlang.",
+      bands: [], licenseNote: "Manba ko'rsatilgan holda bepul."
+    },
+    ERQ: {
+      name: "Emotsiyalarni boshqarish so'rovnomasi (ERQ)",
+      author: "J.J. Gross, O.P. John (2003)",
+      source: "Gross J.J., John O.P. // Journal of Personality and Social Psychology. – 2003. – Vol. 85, № 2. – P. 348–362.",
+      enabled: false, itemCount: 10,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 1, max: 7, labels: [], minLabel: "[1 yorlig'i]", maxLabel: "[7 yorlig'i]" },
+      items: [], reverseItems: [], scoring: "mean",
+      subscales: { "Qayta baholash": [1,3,5,7,8,10], "Bostirish": [2,4,6,9] },
+      keyNote: "Kichik shkalalar manbadan tasdiqlansin. Faqat rahbar tasdiqlasa yoqing (enabled: true).",
+      bands: [], licenseNote: "Tadqiqot uchun bepul (tasdiqlang)."
+    },
+    VASS: {
+      name: "Ijtimoiy frustratsiyalanganlik darajasi",
+      author: "L.I. Vasserman (V.V. Boyko modifikatsiyasi)",
+      source: "Вассерман Л.И., Иовлев Б.В., Беребин М.А. – СПб.: НИПНИ им. В.М. Бехтерева, 2004.",
+      enabled: true, itemCount: 20,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 0, max: 4, labels: [], minLabel: "[yorliq]", maxLabel: "[yorliq]" },
+      items: [], reverseItems: [], subscales: {}, scoring: "mean",
+      keyNote: "Bandlar soni, javob shkalasi va hisoblash usulini qo'llanmadan TEKSHIRING – bu yerda vaqtincha qiymatlar.",
+      bands: [], licenseNote: "[Foydalanish shartini tekshiring]"
+    },
+    SUS: {
+      name: "Platformaning qulaylik shkalasi (SUS)",
+      author: "J. Brooke (1996)",
+      source: "Brooke J. SUS: A \"quick and dirty\" usability scale // Usability Evaluation in Industry. – 1996. – P. 189–194.",
+      enabled: true, itemCount: 10,
+      instructions: "[Yo'riqnoma]",
+      responseScale: { min: 1, max: 5, labels: [], minLabel: "[1 yorlig'i]", maxLabel: "[5 yorlig'i]" },
+      items: [], reverseItems: [], subscales: {}, scoring: "sus",
+      keyNote: "Toq bandlar: ball−1; juft bandlar: 5−ball; yig'indi ×2,5 = 0–100. Manbadan tasdiqlang.",
+      bands: [], licenseNote: "Bepul (manba ko'rsatilsin)."
+    }
+  },
+
+  /* ---------- VIDEOLAR ----------
+     src: YouTube video ID (masalan "abc123XYZ") yoki .mp4 fayl manzili. Bo'sh = "Tez orada".
+     O'zgalarning videolarini yuklab olib qayta joylamang; faqat ruxsat berilgan rasmiy videolarni joylang. */
+  videos: [
+    {id:"VID01", title:"1-dars: Stress nima va u tanada qanday seziladi", topic:"Kirish", dur:"6:00", src:""},
+    {id:"VID02", title:"Stress va baholash: nega bir vaziyat har kimga har xil ta'sir qiladi", topic:"Kirish", dur:"7:00", src:""},
+    {id:"VID03", title:"Sekin nafas: 5 daqiqalik amaliyot", topic:"Tinchlanish", dur:"5:00", src:""},
+    {id:"VID04", title:"\"Quti\" nafas: 4-4-4-4", topic:"Tinchlanish", dur:"4:00", src:""},
+    {id:"VID05", title:"Uzaytirilgan nafas chiqarish", topic:"Tinchlanish", dur:"5:00", src:""},
+    {id:"VID06", title:"Tanani skanerlash: qisqa amaliyot", topic:"Tana", dur:"8:00", src:""},
+    {id:"VID07", title:"Tanani skanerlash: to'liq amaliyot", topic:"Tana", dur:"15:00", src:""},
+    {id:"VID08", title:"Mushaklarni bo'shashtirish (Jacobson usuli) – qisqa", topic:"Tana", dur:"10:00", src:""},
+    {id:"VID09", title:"Mushaklarni bo'shashtirish – to'liq", topic:"Tana", dur:"18:00", src:""},
+    {id:"VID10", title:"5-4-3-2-1: hozirgi lahzaga qaytish", topic:"Diqqat", dur:"4:00", src:""},
+    {id:"VID11", title:"Nafasga e'tibor: ongli e'tibor (mindfulness) asoslari", topic:"Diqqat", dur:"10:00", src:""},
+    {id:"VID12", title:"Fikrlarni kuzatish: \"bulutlar\" mashqi", topic:"Diqqat", dur:"8:00", src:""},
+    {id:"VID13", title:"Imtihon oldidan 3 daqiqa", topic:"Imtihon oldidan", dur:"3:00", src:""},
+    {id:"VID14", title:"Uxlashdan oldin tinchlanish", topic:"Uyqu", dur:"12:00", src:""},
+    {id:"VID15", title:"Ongli yurish", topic:"Tana", dur:"10:00", src:""},
+    {id:"VID16", title:"O'ziga mehr-shafqat mashqi", topic:"Tinchlanish", dur:"10:00", src:""},
+    {id:"VID17", title:"Vaziyatni qayta baholash: amaliy misollar", topic:"Imtihon oldidan", dur:"7:00", src:""},
+    {id:"VID18", title:"Minnatdorlik kundaligi qanday yuritiladi", topic:"Tinchlanish", dur:"5:00", src:""},
+    {id:"VID19", title:"Darsdan keyin \"o'chish\"", topic:"Tinchlanish", dur:"5:00", src:""},
+    {id:"VID20", title:"Qiyin his-tuyg'u bilan qolish", topic:"Diqqat", dur:"8:00", src:""}
+  ]
+};
+
+/* ---------- MASHQLAR (original matnlar) ---------- */
+const EXERCISES = [
+ {id:"EX01", title:"Sekin nafas", tag:"Tinchlanish", min:5, type:"breath", pattern:[5,0,5,0], art:"wave",
+  purpose:"Daqiqasiga taxminan 6 marta nafas olib, tanani tinch holatga o'tkazish.",
+  basis:"Sekin nafas olish yurak ritmi o'zgaruvchanligini oshiradi va bo'shashish hissini kuchaytiradi (Zaccaro va boshq., 2018).",
+  intro:["Qulay o'tiring, yelkalaringizni bo'shating.","Doira kattalashganda burun orqali sekin nafas oling, kichrayganda sekin chiqaring.","Nafasni majburlamang – faqat doira ritmiga ergashing."],
+  outro:"Nafasingizni odatiy holatiga qaytaring. Tanangizda nima o'zgarganini bir lahza kuzating."},
+ {id:"EX02", title:"\"Quti\" nafas", tag:"Tinchlanish", min:4, type:"breath", pattern:[4,4,4,4], art:"square",
+  purpose:"To'rt teng bosqichli nafas bilan fikrni bir nuqtaga jamlash.",
+  basis:"Nafasni ma'lum ritmga solish e'tiborni hozirgi lahzaga qaytaradi va zo'riqishni pasaytiradi.",
+  intro:["Kvadratning to'rt tomonini tasavvur qiling.","4 soniya nafas oling, 4 soniya ushlab turing, 4 soniya chiqaring, 4 soniya kuting.","Bosh aylansa, ushlab turish qismini qisqartiring."],
+  outro:"Bir necha marta odatiy nafas oling va mashqni yakunlang."},
+ {id:"EX03", title:"Uzaytirilgan nafas chiqarish", tag:"Tinchlanish", min:5, type:"breath", pattern:[4,0,6,0], art:"wave",
+  purpose:"Nafas chiqarishni uzaytirib, tanani tinchlantiruvchi tizimni faollashtirish.",
+  basis:"Uzun nafas chiqarish parasimpatik faollik bilan bog'liq (Zaccaro va boshq., 2018).",
+  intro:["4 soniya nafas oling, 6 soniya davomida sekin chiqaring.","Nafas chiqarganda lablaringizni biroz yumib, havoni asta qo'yib yuboring."],
+  outro:"Har bir chuqur nafas chiqarish bilan tanangiz biroz yengillashganini sezing."},
+ {id:"EX04", title:"Tanani skanerlash (qisqa)", tag:"Tana", min:8, type:"guided", art:"body",
+  purpose:"Tanadagi zo'riqishni sezish va uni yumshatish.",
+  basis:"Tanani skanerlash – MBSR dasturining asosiy mashqlaridan biri (Kabat-Zinn, 1990).",
+  steps:["Qulay o'tiring yoki yoting. Ko'zlaringizni yuming yoki nigohingizni pastga qarating.","E'tiboringizni oyoq panjalaringizga qarating. Issiqlik, sovuqlik yoki bosimni seza olasizmi?","E'tiborni sekin boldir va tizzalarga ko'taring. Biror narsani o'zgartirishga urinmang – faqat sezing.","Endi son va belga e'tibor bering. Zo'riqish bo'lsa, nafas chiqarganda o'sha joyni yumshatishga ruxsat bering.","Qorin va ko'krak: nafas bilan ko'tarilib-tushishini kuzating.","Yelka va bo'yin – ko'pincha stress shu yerda yig'iladi. Yelkalaringizni biroz pastga tushiring.","Yuz: peshona, ko'z atrofi, jag'. Jag'ingizni bo'shating.","Endi butun tanangizni bir butun sifatida his qiling. Bir necha chuqur nafas oling."]},
+ {id:"EX05", title:"Tanani skanerlash (to'liq)", tag:"Tana", min:15, type:"guided", art:"body",
+  purpose:"Boshdan oyoqqacha batafsil e'tibor bilan chuqur bo'shashish.",
+  basis:"MBSR dasturidagi to'liq tana skaneri (Kabat-Zinn, 1990).",
+  steps:["Yotgan yoki o'tirgan holda qulay joylashing. Bir necha marta sekin nafas oling.","Chap oyoq barmoqlari: har bir barmoqni alohida sezishga harakat qiling.","Chap oyoq tagi, tovon, to'piq. Yerga tegib turgan joylarni his qiling.","Chap boldir va tizza. Agar hech narsa sezilmasa – bu ham normal.","Chap son. Endi e'tiborni o'ng oyoq barmoqlariga o'tkazing.","O'ng oyoq tagi, to'piq, boldir, tizza va son.","Dumba va bel. Bu joylardagi og'irlikni yerga topshiring.","Qorin: nafas olganda ko'tarilishi, chiqarganda tushishi.","Ko'krak va yurak urishi. Uni o'zgartirmasdan kuzating.","Qo'llar: barmoq uchlaridan yelkalargacha.","Bo'yin, ensa va yelkalar. Har nafas chiqarishda bu yerdagi taranglik kamayishiga ruxsat bering.","Yuz va bosh. Endi butun tanani bir butun sifatida his qiling va asta ko'zingizni oching."]},
+ {id:"EX06", title:"Mushaklarni bo'shashtirish (qisqa)", tag:"Tana", min:10, type:"guided", art:"body",
+  purpose:"Mushaklarni navbat bilan qisib-bo'shatib, tanadagi zo'riqishni kamaytirish.",
+  basis:"E. Jacobson ishlab chiqqan progressiv mushak relaksatsiyasi (Jacobson, 1938).",
+  steps:["Qulay o'tiring. Har bir mushak guruhini 5 soniya qising, so'ng 20–30 soniya bo'shating.","Mushtlaringizni qattiq qising… endi qo'yib yuboring. Farqni sezing.","Qo'llaringizni tirsakdan bukib, bilak mushaklarini qising… bo'shating.","Yelkalarni quloqlarga tomon ko'taring… pastga tushiring.","Ko'zlarni qattiq yuming, peshonani tirishtiring… bo'shating.","Qorin mushaklarini taranglang… bo'shating, nafasni erkin qo'ying.","Oyoq barmoqlarini o'zingizga torting, boldirlarni taranglang… bo'shating.","Butun tanadagi yengillikni his qiling. Bir necha sekin nafas oling."]},
+ {id:"EX07", title:"Mushaklarni bo'shashtirish (to'liq)", tag:"Tana", min:18, type:"guided", art:"body",
+  purpose:"16 ta mushak guruhi bo'yicha to'liq relaksatsiya.",
+  basis:"Progressiv mushak relaksatsiyasi (Jacobson, 1938).",
+  steps:["Qulay joylashing. Har bir guruhni 5–7 soniya qising, 30 soniya bo'shating.","O'ng qo'l mushti va bilagi.","O'ng yelka (tirsakni bukib).","Chap qo'l mushti va bilagi.","Chap yelka.","Peshona (qoshlarni ko'taring).","Ko'z atrofi va burun.","Jag' (tishlarni yengil qising).","Bo'yin (iyakni ko'krakka tortib).","Yelkalar va kurak.","Ko'krak va qorin.","O'ng son, boldir va oyoq panjasi.","Chap son, boldir va oyoq panjasi.","Butun tanani bo'shashgan holda his qiling. Sekin ko'zingizni oching."]},
+ {id:"EX08", title:"5-4-3-2-1: hozirgi lahzaga qaytish", tag:"Diqqat", min:4, type:"guided", art:"leaf",
+  purpose:"Sezgilar orqali xavotirli fikrlardan hozirgi lahzaga qaytish.",
+  basis:"Sezgilarga tayanib e'tiborni jamlash (grounding) – keng qo'llaniladigan amaliy usul; alohida samaradorlik dalillari cheklangan.",
+  steps:["Atrofingizga qarang va ko'rayotgan 5 ta narsani ichingizda nomlang.","Hozir tanangiz sezayotgan 4 ta narsani toping: kiyim, stul, havo…","Eshitayotgan 3 ta tovushni ajrating – uzoqdagi va yaqindagi.","Seza olayotgan 2 ta hidni toping (yoki yoqtirgan hidingizni eslang).","1 ta ta'mni sezing yoki og'zingizdagi hissiyotga e'tibor bering.","Bir chuqur nafas oling. Siz hozir shu yerdasiz."]},
+ {id:"EX09", title:"Nafasga e'tibor", tag:"Diqqat", min:10, type:"guided", art:"wave",
+  purpose:"Ongli e'tibor (mindfulness)ning asosiy ko'nikmasi: e'tiborni qaytarish.",
+  basis:"Ongli e'tibor mashqlari xavotir va takroriy salbiy o'ylarni kamaytirishi meta-tahlilda ko'rsatilgan (Gu va boshq., 2015).",
+  steps:["Qulay, lekin tik o'tiring. Nafasingizni o'zgartirmang.","Nafas eng aniq seziladigan joyni toping: burun, ko'krak yoki qorin.","Har bir nafas olish va chiqarishni kuzating.","Fikr chalg'ishi tabiiy. Buni payqaganingizda, yumshoqlik bilan nafasga qayting.","Har bir qaytish – bu mashqning o'zi. O'zingizni koyimang.","Nafas chiqargandan keyingi qisqa pauzani sezing.","Yana bir necha daqiqa shu holatda qoling.","Asta atrofdagi tovushlarga e'tibor qaratib, mashqni yakunlang."]},
+ {id:"EX10", title:"Fikrlarni kuzatish (\"bulutlar\")", tag:"Diqqat", min:8, type:"guided", art:"cloud",
+  purpose:"Fikrlarga ergashmasdan, ularni chetdan kuzatishni o'rganish.",
+  basis:"Fikrlardan masofa olish (decentering) – MBCT ning asosiy mexanizmlaridan biri (Gu va boshq., 2015).",
+  steps:["Ko'zingizni yuming va osmonni tasavvur qiling.","Har bir fikringizni osmonda suzib yurgan bulut deb tasavvur qiling.","Fikr paydo bo'lsa, uni nomlang: \"reja\", \"xavotir\", \"xotira\".","Bulutni ushlab qolmang va haydamang – u o'z-o'zidan o'tib ketadi.","Agar fikrga berilib ketsangiz, buni payqang va yana osmonga qayting.","Siz – osmonsiz, fikrlar esa o'tkinchi bulutlar.","Bir necha sekin nafas bilan mashqni yakunlang."]},
+ {id:"EX11", title:"Imtihon oldidan 3 daqiqa", tag:"Imtihon oldidan", min:3, type:"guided", art:"sun",
+  purpose:"Imtihon yoki chiqishdan oldin tanani tinchlantirish va vaziyatni qayta baholash.",
+  basis:"Stress darajasi vaziyatni baholashga bog'liq (Lazarus, Folkman, 1984); sekin nafas tanani tinchlantiradi.",
+  steps:["4 soniya nafas oling, 6 soniya chiqaring. Uch marta takrorlang.","Yurak tez urayotgan bo'lsa, bu tanangiz sizni tayyorlayotganini anglatadi.","O'zingizga ayting: \"Men tayyorgarlik ko'rdim. Bilganimni ko'rsataman\".","Eng birinchi qiladigan kichik qadamingizni tasavvur qiling: savolni o'qish.","Yana ikki marta sekin nafas oling va boshlang."]},
+ {id:"EX12", title:"Uxlashdan oldin tinchlanish", tag:"Uyqu", min:12, type:"guided", art:"moon",
+  purpose:"Kunning zo'riqishini qo'yib, uyquga tayyorlanish.",
+  basis:"Mushak relaksatsiyasi (Jacobson, 1938) va sekin nafas (Zaccaro va boshq., 2018) birikmasi.",
+  steps:["Telefonni ovozsiz qiling va qulay yoting.","4 soniya nafas oling, 6 soniya chiqaring. Bir necha marta.","Oyoqlaringizni taranglang… bo'shating. Og'irligini to'shakka topshiring.","Qorin va ko'krak: nafas bilan sekin ko'tarilib-tushishini kuzating.","Qo'llar va yelkalar: qising… bo'shating.","Yuz va jag'ni bo'shating.","Bugungi kundan bitta yaxshi lahzani eslang.","Endi hech narsa qilish shart emas. Nafasingiz o'z-o'zidan davom etsin."]},
+ {id:"EX13", title:"Ongli yurish", tag:"Tana", min:10, type:"guided", art:"leaf",
+  purpose:"Yurish harakatiga e'tibor berib, fikrni tinchlantirish.",
+  basis:"Ongli e'tiborni harakat bilan birlashtirish – MBSR dasturidagi mashqlardan biri (Kabat-Zinn, 1990).",
+  steps:["10–15 qadamlik tinch joy toping. Odatdagidan sekinroq yuring.","Oyoq tagining yerga tegishini sezing: tovon, oyoq kafti, barmoqlar.","Oyoqni ko'tarish, oldinga olish va qo'yish harakatlarini kuzating.","Fikr chalg'isa, e'tiborni yana oyoqlarga qaytaring.","Yo'lning oxirida to'xtang, nafas oling va orqaga buriling.","Atrofdagi havo, tovush va yorug'likni ham payqang.","Sekin to'xtang va bir necha nafas oling."]},
+ {id:"EX14", title:"O'ziga mehr-shafqat", tag:"Tinchlanish", min:10, type:"guided", art:"sun",
+  purpose:"Qiyin paytda o'zingizga yaqin do'stingizga qanday munosabatda bo'lsangiz, shunday munosabatda bo'lish.",
+  basis:"Mehr-shafqat mashqlari; ilova orqali o'tkazilgan mindfulness dasturida o'ziga mehr-shafqat oshgani qayd etilgan (Huberty va boshq., 2019).",
+  steps:["Qulay o'tiring va qo'lingizni yuragingiz ustiga qo'ying.","Hozir sizni qiynayotgan kichik vaziyatni eslang.","O'zingizga ayting: \"Bu qiyin lahza. Qiyinchilik hamma odamda bo'ladi\".","\"Men o'zimga g'amxo'rlik qila olaman\" deb ichingizda takrorlang.","Endi bu tilakni yaqin insoningizga yo'llang: \"Sen tinch va sog' bo'l\".","So'ng barcha odamlarga: \"Hamma tinch va xotirjam bo'lsin\".","Bir necha nafas bilan qo'lingizni tushiring."]},
+ {id:"EX15", title:"Qayta baholash kundaligi", tag:"Imtihon oldidan", min:7, type:"journal", art:"note",
+  purpose:"Stressli vaziyatga boshqa nuqtai nazardan qarashni yozma mashq qilish.",
+  basis:"Kognitiv qayta baholash – kognitiv-xulqiy terapiyaning asosiy usuli (Hofmann va boshq., 2012; Lazarus, Folkman, 1984).",
+  prompts:["Bugun sizni qaysi vaziyat bezovta qildi? (qisqa)","Shu paytda qanday fikr keldi?","Bu fikrni tasdiqlaydigan va inkor qiladigan dalillar qaysilar?","Yaqin do'stingiz shu holatda bo'lsa, unga nima der edingiz?","Endi vaziyatga qanday realistikroq qarash mumkin?"]},
+ {id:"EX16", title:"Minnatdorlik kundaligi", tag:"Tinchlanish", min:5, type:"journal", art:"note",
+  purpose:"Kunning ijobiy tomonlariga e'tiborni qaratish.",
+  basis:"Ijobiy psixologiya mashqi; dalillar aralash, ta'siri odatda kichik.",
+  prompts:["Bugun sizni quvontirgan 3 ta kichik narsani yozing.","Ulardan biri nima uchun siz uchun muhim?","Bugun kimgadir minnatdorchilik bildirdingizmi yoki bildirmoqchimisiz?"]},
+ {id:"EX17", title:"Darsdan keyin \"o'chish\"", tag:"Tinchlanish", min:5, type:"guided", art:"wave",
+  purpose:"O'qish yoki ishdan keyin fikrni yengillashtirib, dam olishga o'tish.",
+  basis:"Qisqa nafas va tana kuzatuvi birikmasi.",
+  steps:["Bugun bajargan ishlaringizdan birini eslang va uni \"yakunlandi\" deb belgilang.","Ertangi ishlarni xayolan qog'ozga yozib, chetga qo'yganingizni tasavvur qiling.","4 soniya nafas oling, 6 soniya chiqaring. Bir necha marta.","Yelka, bo'yin va ko'zlardagi charchoqni sezing va bo'shating.","Endi kechqurun nima bilan dam olishingizni tanlang."]},
+ {id:"EX18", title:"Qiyin his-tuyg'u bilan qolish", tag:"Diqqat", min:8, type:"guided", art:"cloud",
+  purpose:"Og'ir his-tuyg'udan qochmasdan, uni xavfsiz tarzda kuzatish.",
+  basis:"Qabul qilish va ongli kuzatishga asoslangan mashq (Gu va boshq., 2015).",
+  steps:["Qulay o'tiring. Hozir qanday his-tuyg'u borligini payqang.","Unga nom bering: \"xavotir\", \"g'azab\", \"xafalik\"…","Bu his-tuyg'u tanangizning qayerida seziladi?","Uni o'zgartirishga urinmang. O'sha joyga nafas yo'llang.","O'zingizga ayting: \"Bu his-tuyg'u hozir bor. U o'tib ketadi\".","His-tuyg'u kuchayib ketsa, ko'zingizni oching va oyoqlaringizni yerga bosing.","Bir necha sekin nafas bilan mashqni yakunlang."]}
+];
+
+/* =========================================================
+   STORAGE (try/catch bilan) va LOGGING
+   ========================================================= */
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem("sn_"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("sn_"+k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem("sn_"+k); }catch(e){} }
+};
+const state = {
+  get p(){ return LS.get("participant", null); },
+  set p(v){ LS.set("participant", v); }
+};
+function device(){ const u = navigator.userAgent; return /android/i.test(u) ? "Android" : /iphone|ipad|ipod/i.test(u) ? "iOS" : "desktop"; }
+function nowISO(){ return new Date().toISOString(); }
+
+function logEvent(event_type, data = {}){
+  const p = state.p;
+  const ev = Object.assign({
+    timestamp_utc: nowISO(),
+    participant_code: p ? p.code : "",
+    group: p ? p.group : "",
+    stage: p ? currentStage(p) : "",
+    event_type, item_id:"", value:"", content_id:"", duration_sec:"", percent:"",
+    device: device(), app_version: CONFIG.appVersion
+  }, data);
+  const all = LS.get("events", []); all.push(ev); LS.set("events", all);   // mahalliy nusxa (kundalik uchun)
+  const q = LS.get("queue", []); q.push(ev); LS.set("queue", q);
+  flushQueue();
+  return ev;
+}
+let flushing = false;
+async function flushQueue(){
+  if (flushing || !CONFIG.apiUrl) return;
+  const q = LS.get("queue", []);
+  if (!q.length) return;
+  flushing = true;
+  try{
+    const batch = q.slice(0, 200);
+    const res = await fetch(CONFIG.apiUrl, { method:"POST", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify({ events: batch }) });
+    const j = await res.json().catch(()=>({ok:false}));
+    if (j && j.ok){ LS.set("queue", LS.get("queue", []).slice(batch.length)); }
+  }catch(e){ /* tarmoq yo'q — navbatda qoladi */ }
+  flushing = false;
+  if (LS.get("queue", []).length && navigator.onLine) setTimeout(flushQueue, 4000);
+}
+window.addEventListener("online", flushQueue);
+
+/* =========================================================
+   STUDY LOGIC
+   ========================================================= */
+function daysSince(iso){ return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000); }
+function completed(p, stage){ return !!(p.done && p.done[stage]); }
+function currentStage(p){
+  if (!p) return "";
+  if (p.withdrawn) return "withdrawn";
+  if (!p.demographics) return "demografiya";
+  if (!completed(p,"T0")) return "T0";
+  if (CONFIG.design === "cross-sectional") return "yakunlandi";
+  const d = daysSince(p.t0Date);
+  if (d < CONFIG.programDays) return "programme";
+  if (!completed(p,"T1")) return "T1";
+  if (CONFIG.followUpDays > 0 && !completed(p,"T2")){
+    return d >= CONFIG.programDays + CONFIG.followUpDays ? "T2" : "followup-wait";
+  }
+  return "yakunlandi";
+}
+function exercisesLocked(p){
+  if (!p) return false;
+  return CONFIG.design === "two-group" && p.group === "nazorat" && !completed(p,"T1");
+}
+const STAGE_TXT = {
+  demografiya:"Demografik anketa kutilmoqda", T0:"Boshlang'ich testlar (T0)", programme:"Mashqlar davri",
+  T1:"Yakuniy testlar (T1)", T2:"Kuzatuv testlari (T2)", "followup-wait":"Kuzatuv testini kutish", yakunlandi:"Tadqiqot yakunlandi", withdrawn:"Ishtirok to'xtatilgan"
+};
+
+/* =========================================================
+   SCORING ENGINE
+   ========================================================= */
+function scoreInstrument(key, answers){
+  const ins = CONFIG.instruments[key];
+  const n = ins.itemCount, min = ins.responseScale.min, max = ins.responseScale.max;
+  const vals = [];
+  for (let i=1;i<=n;i++){
+    let v = answers[i];
+    if (v === undefined || v === null) return { error: "Javobsiz band: " + i };
+    if (ins.scoring !== "sus" && ins.reverseItems.includes(i)) v = (min + max) - v;
+    vals.push(v);
+  }
+  let total, label = "";
+  if (ins.scoring === "sum") total = vals.reduce((a,b)=>a+b,0);
+  else if (ins.scoring === "mean") total = +(vals.reduce((a,b)=>a+b,0)/n).toFixed(2);
+  else if (ins.scoring === "who5") total = vals.reduce((a,b)=>a+b,0) * 4;
+  else if (ins.scoring === "sus") total = vals.reduce((a,v,i)=> a + ((i % 2 === 0) ? (v - 1) : (5 - v)), 0) * 2.5;
+  const subs = {};
+  for (const [name, idx] of Object.entries(ins.subscales || {})){
+    const s = idx.map(i => { let v = answers[i]; if (ins.reverseItems.includes(i)) v = (min+max)-v; return v; });
+    subs[name] = ins.scoring === "mean" ? +(s.reduce((a,b)=>a+b,0)/s.length).toFixed(2) : s.reduce((a,b)=>a+b,0);
+  }
+  let band = null;
+  if (ins.bands && ins.bands.length){ band = ins.bands.find(b => total <= b.max) || ins.bands[ins.bands.length-1]; label = band.label; }
+  return { total, subscales: subs, band: label, bandIndex: band ? ins.bands.indexOf(band) : -1 };
+}
+/* Konsol testi: runScoringTests()
+   Kutilgan natijalar (standart CONFIG bilan):
+   PSS10 hammasi 0 -> 16 (4 teskari band 4 dan), hammasi 4 -> 24;  WHO5 hammasi 5 -> 100;
+   SUS hammasi 3 -> 50;  SUS toq=5, juft=1 -> 100;  MAAS hammasi 6 -> 6  */
+function runScoringTests(){
+  const fill = (n,v)=>{ const o={}; for(let i=1;i<=n;i++) o[i]=v; return o; };
+  const susBest = {}; for(let i=1;i<=10;i++) susBest[i] = (i%2===1)?5:1;
+  const r = {
+    "PSS10 all0 (16)": scoreInstrument("PSS10", fill(10,0)).total,
+    "PSS10 all4 (24)": scoreInstrument("PSS10", fill(10,4)).total,
+    "WHO5 all5 (100)": scoreInstrument("WHO5", fill(5,5)).total,
+    "SUS all3 (50)": scoreInstrument("SUS", fill(10,3)).total,
+    "SUS best (100)": scoreInstrument("SUS", susBest).total,
+    "MAAS all6 (6)": scoreInstrument("MAAS", fill(15,6)).total
+  };
+  console.table(r); return r;
+}
+window.runScoringTests = runScoringTests;
+
+/* =========================================================
+   UTIL
+   ========================================================= */
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const main = $("#main");
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"),2600); }
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function go(hash){ location.hash = hash; }
+function fmtTime(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+
+/* Original SVG illustrations */
+function art(kind, seed=0){
+  const c = ["var(--calm)","var(--accent)","var(--info)"][seed%3];
+  const bg = `<rect width="320" height="180" fill="var(--surface-warm)"/>`;
+  const sun = `<circle cx="${230 - seed*7 % 60}" cy="70" r="34" fill="${c}" opacity=".35"/>`;
+  const shapes = {
+    wave:`${sun}<path d="M0 120 C60 90 110 150 170 120 S270 90 320 115 V180 H0Z" fill="var(--calm)" opacity=".55"/><path d="M0 140 C70 115 120 165 190 140 S280 120 320 138 V180 H0Z" fill="var(--calm)" opacity=".8"/>`,
+    square:`<rect x="110" y="40" width="100" height="100" rx="18" fill="none" stroke="${c}" stroke-width="6" opacity=".7"/><circle cx="110" cy="40" r="9" fill="var(--accent)"/>`,
+    body:`${sun}<path d="M0 150 Q80 110 160 140 T320 130 V180 H0Z" fill="var(--calm)" opacity=".6"/><circle cx="160" cy="78" r="16" fill="${c}" opacity=".6"/><path d="M130 140 Q160 96 190 140" fill="${c}" opacity=".5"/>`,
+    leaf:`<path d="M90 140 C90 80 150 40 230 40 C230 110 180 150 90 140Z" fill="var(--calm)" opacity=".65"/><path d="M95 138 C140 110 180 80 225 45" stroke="var(--bg)" stroke-width="3" fill="none"/>`,
+    cloud:`<g fill="${c}" opacity=".45"><ellipse cx="110" cy="80" rx="46" ry="24"/><ellipse cx="145" cy="68" rx="36" ry="28"/><ellipse cx="225" cy="115" rx="40" ry="20"/><ellipse cx="250" cy="105" rx="26" ry="20"/></g>`,
+    sun:`<circle cx="160" cy="100" r="44" fill="var(--accent)" opacity=".45"/><path d="M0 140 H320 V180 H0Z" fill="var(--calm)" opacity=".5"/><g stroke="var(--accent)" stroke-width="4" opacity=".4" stroke-linecap="round"><path d="M160 30v18M100 52l12 12M220 52l-12 12"/></g>`,
+    moon:`<rect width="320" height="180" fill="var(--info)" opacity=".18"/><circle cx="210" cy="70" r="30" fill="var(--bg)" opacity=".9"/><circle cx="222" cy="62" r="27" fill="var(--surface-warm)"/><g fill="var(--bg)" opacity=".8"><circle cx="80" cy="50" r="2"/><circle cx="120" cy="90" r="1.6"/><circle cx="60" cy="110" r="1.8"/></g>`,
+    note:`<rect x="105" y="35" width="110" height="120" rx="12" fill="var(--bg)" stroke="${c}" stroke-width="3"/><g stroke="${c}" stroke-width="3" opacity=".6" stroke-linecap="round"><path d="M125 65h70M125 88h70M125 111h45"/></g>`
+  };
+  return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${bg}${shapes[kind]||shapes.wave}</svg>`;
+}
+
+/* =========================================================
+   VIEWS
+   ========================================================= */
+function exerciseCard(ex){
+  const done = LS.get("events", []).some(e => e.event_type==="exercise_complete" && e.content_id===ex.id);
+  return `<article class="card reveal">
+    <a class="card-vis" href="#/mashq/${ex.id}" tabindex="-1" aria-hidden="true">${art(ex.art, +ex.id.slice(2))}</a>
+    <div class="card-body">
+      <div class="card-meta"><span>${esc(ex.tag)}</span><span class="dur">⏱ ${ex.min} daqiqa</span></div>
+      <h3>${esc(ex.title)}</h3>
+      <p>${esc(ex.purpose)}</p>
+      <div class="card-foot">
+        <a class="btn btn-primary btn-sm" href="#/mashq/${ex.id}">Boshlash <span class="arr">→</span></a>
+        <span class="row" style="gap:8px">${done?'<span class="badge">Bajarildi</span>':''}
+        <span class="tip"><button aria-label="Ilmiy asos">i</button><span class="tip-box" role="tooltip"><b>Ilmiy asos.</b> ${esc(ex.basis)}</span></span></span>
+      </div>
+    </div></article>`;
+}
+
+function videoCard(v, i){
+  const prog = (LS.get("vprog", {})[v.id]) || 0;
+  return `<article class="card reveal" data-vid="${v.id}">
+    <div class="vthumb">${art(["wave","leaf","sun","cloud","body"][i%5], i).replace('<svg','<svg class="bgart"')}
+      ${v.src ? `<button class="play" data-play="${v.id}" aria-label="Videoni ko'rish: ${esc(v.title)}"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>` : `<span class="soon">Tez orada</span>`}
+      <span class="dchip">${esc(v.dur)}</span>
+    </div>
+    <div class="vprog" aria-hidden="true"><i style="width:${prog}%"></i></div>
+    <div class="card-body">
+      <div class="card-meta"><span>${esc(v.topic)}</span><span class="dur">${prog?prog+"% ko'rilgan":""}</span></div>
+      <h3>${esc(v.title)}</h3>
+    </div></article>`;
+}
+
+function viewHome(){
+  const p = state.p;
+  main.innerHTML = `
+  <section class="hero">
+    <div class="aurora"></div><div class="grain"></div>
+    <svg class="hero-horizon" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80 C240 40 480 110 720 70 S1200 40 1440 75 V120 H0Z" fill="var(--calm)" opacity=".25"/></svg>
+    <div class="wrap"><div class="hero-inner">
+      <div class="eyebrow">Andijon davlat universiteti · Ilmiy tadqiqot</div>
+      <h1>Stressni boshqarish — har kuni bir necha daqiqada</h1>
+      <p class="lead">Bu platforma "${esc(CONFIG.dissertation)}" mavzusidagi magistrlik tadqiqotining amaliy qismi. Siz qisqa testlarni to'ldirasiz, ${CONFIG.programDays} kun davomida nafas, tana va ongli e'tibor mashqlarini bajarasiz, so'ng testlarni yana bir bor to'ldirasiz.</p>
+      <div class="row" style="margin-top:24px">
+        ${p ? `<a class="btn btn-primary" href="#/kundalik">Davom etish <span class="arr">→</span></a>` : `<a class="btn btn-primary" href="#/rozilik">Ishtirok etish <span class="arr">→</span></a>`}
+        <a class="btn btn-outline" href="#/mashqlar">Mashqlarni ko'rish</a>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><h2>Qanday ishlaydi</h2><p>To'rt bosqich, har biri sizning qulay vaqtingizda.</p></div>
+    <ol class="steps">
+      <li class="reveal"><h3>Rozilik</h3><p class="muted small">Tadqiqot shartlari bilan tanishasiz va anonim kodingiz bilan kirasiz.</p></li>
+      <li class="reveal"><h3>Testlar</h3><p class="muted small">Stress va farovonlik haqidagi qisqa so'rovnomalar (15–20 daqiqa).</p></li>
+      <li class="reveal"><h3>${CONFIG.programDays} kunlik mashqlar</h3><p class="muted small">Haftasiga kamida ${CONFIG.weeklyGoalSessions} marta 5–15 daqiqalik mashq yoki video.</p></li>
+      <li class="reveal"><h3>Yakuniy test</h3><p class="muted small">Testlarni yana to'ldirasiz va o'zgarishni ko'rasiz.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="sec" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div class="eyebrow">18 ta mashq</div><h2>Mashqlar</h2><p>Nafas, tana va ongli e'tiborga asoslangan qisqa amaliyotlar.</p></div>
+    <div class="grid g3">${EXERCISES.slice(0,6).map(exerciseCard).join("")}</div>
+    <div class="more"><a class="btn btn-outline" href="#/mashqlar">Barcha mashqlar <span class="arr">→</span></a></div>
+  </div></section>
+
+  <section class="sec" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><div class="eyebrow">${CONFIG.videos.length} ta video</div><h2>Videolar</h2><p>O'zbek tilidagi qisqa video darslar va amaliyotlar.</p></div>
+    <div class="grid g3 vcarousel">${CONFIG.videos.slice(0,3).map(videoCard).join("")}</div>
+    <div class="more"><a class="btn btn-outline" href="#/videolar">Barcha videolar <span class="arr">→</span></a></div>
+  </div></section>
+
+  <section class="sec" style="padding-top:0"><div class="wrap">
+    <div class="sec-head"><h2>Ilmiy asos</h2><p>Platformadagi mashqlar ilmiy adabiyotda o'rganilgan usullarga tayanadi.</p></div>
+    <div class="grid g3">
+      <div class="tile reveal"><div class="k">Nafas</div><h3 style="margin-top:8px">Sekin nafas</h3><p class="muted small">Daqiqasiga ~6 marta nafas olish tanani tinchlantiruvchi tizim faolligi bilan bog'liq.</p><p class="small muted">Zaccaro A. va boshq., 2018</p></div>
+      <div class="tile reveal"><div class="k">Ongli e'tibor</div><h3 style="margin-top:8px">Mindfulness</h3><p class="muted small">Mindfulness dasturlari takroriy salbiy o'ylar va xavotirni kamaytiradi.</p><p class="small muted">Gu J. va boshq., 2015; Kabat-Zinn J., 1990</p></div>
+      <div class="tile reveal"><div class="k">Tana</div><h3 style="margin-top:8px">Mushak relaksatsiyasi</h3><p class="muted small">Mushaklarni navbat bilan qisib-bo'shatish tanadagi zo'riqishni kamaytiradi.</p><p class="small muted">Jacobson E., 1938</p></div>
+    </div>
+    <p class="small muted" style="margin-top:20px">Mobil ilovalarning stressga ta'siri bo'yicha mavjud dalillar kichik, ammo ijobiy ta'sirni ko'rsatadi (Linardon va boshq., 2024). Shu sababli bu platforma ilmiy tadqiqot doirasida sinovdan o'tkazilmoqda.</p>
+  </div></section>`;
+}
+
+function viewConsent(){
+  const p = state.p;
+  main.innerHTML = `<section class="sec"><div class="wrap read">
+    <div class="eyebrow">1-qadam</div><h1>Tadqiqot haqida ma'lumot va rozilik</h1>
+    <div class="panel stack" id="consentText" style="max-height:52vh;overflow:auto" tabindex="0" aria-label="Rozilik matni">
+      <h3>1. Tadqiqot maqsadi</h3><p>Ushbu tadqiqot mobil va veb texnologiyalar yordamida stressni boshqarish imkoniyatlarini o'rganadi. U ${esc(CONFIG.ownerLine)} tomonidan "${esc(CONFIG.dissertation)}" mavzusidagi magistrlik dissertatsiyasi doirasida o'tkaziladi. ${esc(CONFIG.supervisorLine)}.</p>
+      <h3>2. Sizdan nima talab qilinadi</h3><p>Siz boshlanishda stress va farovonlik haqidagi so'rovnomalarni (15–20 daqiqa) to'ldirasiz. So'ngra ${CONFIG.programDays} kun davomida haftasiga kamida ${CONFIG.weeklyGoalSessions} marta qisqa mashq yoki video bilan shug'ullanasiz. Oxirida so'rovnomalarni yana to'ldirasiz${CONFIG.followUpDays?`, ${CONFIG.followUpDays} kundan keyin esa yana bir marta`:''}.</p>
+      <h3>3. Ixtiyoriylik</h3><p>Ishtirok to'liq ixtiyoriy. Istalgan vaqtda hech qanday oqibatsiz ishtirokni to'xtatishingiz mumkin ("Kundalik" sahifasidagi tugma orqali).</p>
+      <h3>4. Anonimlik va ma'lumotlar</h3><p>Siz faqat tadqiqotchi bergan anonim kod bilan kirasiz. Ismingiz, telefoningiz va manzilingiz so'ralmaydi va saqlanmaydi. Javoblaringiz va mashqlar statistikasi himoyalangan jadvalda saqlanadi; ularni faqat tadqiqotchi va ilmiy rahbar ko'radi. Natijalar faqat umumlashtirilgan holda e'lon qilinadi. Kundalik mashqlaridagi yozuvlaringiz faqat qurilmangizda qoladi.</p>
+      <h3>5. Xavf va foyda</h3><p>Mashqlar xavfsiz, lekin ba'zan noqulay his-tuyg'ular uyg'otishi mumkin. Bosh aylansa yoki o'zingizni yomon his qilsangiz, mashqni to'xtating. Platforma tibbiy yoki psixologik yordam o'rnini bosmaydi.</p>
+      <h3>6. Bog'lanish</h3><p>Savollar uchun: ${esc(CONFIG.contact.phone)}, ${esc(CONFIG.contact.email)}.</p>
+      ${CONFIG.ethicsApproval ? `<p class="small muted">Etika ruxsati: ${esc(CONFIG.ethicsApproval)}</p>` : ""}
+    </div>
+    <form id="consentForm" class="panel" style="margin-top:16px">
+      ${CONFIG.minorsIncluded ? `<div class="field"><label class="lbl" for="parentCode">Ota-ona roziligi varaqasi raqami</label><input class="inp" id="parentCode" required inputmode="numeric" placeholder="masalan, 014"><p class="small muted">18 yoshgacha bo'lsangiz, ota-onangiz imzolagan rozilik varaqasi raqami.</p></div>`:""}
+      <label class="row" style="gap:12px;align-items:flex-start;cursor:pointer">
+        <input type="checkbox" id="agree" style="width:24px;height:24px;margin-top:2px;accent-color:var(--accent)" ${p?'checked disabled':''}>
+        <span>Ma'lumot bilan tanishdim va tadqiqotda ixtiyoriy ishtirok etishga roziman.</span>
+      </label>
+      <p class="small muted" id="scrollHint">${p?'Siz allaqachon rozilik bergansiz.':'Tugma matn oxirigacha o\'qilgach faollashadi.'}</p>
+      <div class="row" style="justify-content:flex-end"><button class="btn btn-primary" id="consentBtn" disabled>Roziman, davom etish <span class="arr">→</span></button></div>
+    </form>
+  </div></section>`;
+  const box = $("#consentText"), agree = $("#agree"), btn = $("#consentBtn");
+  let readAll = !!p;
+  const check = () => { btn.disabled = !(readAll && agree.checked) || !!p; };
+  const onScroll = () => { if (box.scrollTop + box.clientHeight >= box.scrollHeight - 8){ readAll = true; $("#scrollHint").textContent = "Rahmat! Endi rozilikni belgilashingiz mumkin."; check(); } };
+  box.addEventListener("scroll", onScroll); onScroll();
+  agree.addEventListener("change", check);
+  $("#consentForm").addEventListener("submit", e => {
+    e.preventDefault();
+    LS.set("consent", { at: nowISO(), parent: CONFIG.minorsIncluded ? ($("#parentCode")?.value || "") : "" });
+    go("#/kirish");
+  });
+}
+
+function viewLogin(){
+  const p = state.p;
+  if (!LS.get("consent", null) && !p){ main.innerHTML = `<section class="sec"><div class="wrap read center"><h1>Avval rozilik bering</h1><p class="muted">Kirishdan oldin tadqiqot shartlari bilan tanishing.</p><a class="btn btn-primary" href="#/rozilik">Rozilik sahifasi <span class="arr">→</span></a></div></section>`; return; }
+  main.innerHTML = `<section class="sec"><div class="wrap read">
+    <div class="eyebrow">2-qadam</div><h1>Anonim kod bilan kirish</h1>
+    <p class="muted">Kodni tadqiqotchidan olasiz (masalan, P014). Parol kerak emas.</p>
+    <form class="panel" id="loginForm" novalidate>
+      <div class="field"><label class="lbl" for="code">Ishtirokchi kodi</label>
+        <input class="inp" id="code" autocomplete="off" autocapitalize="characters" placeholder="P001" value="${p?esc(p.code):''}" aria-describedby="codeErr">
+        <div class="err" id="codeErr" role="alert"></div></div>
+      <button class="btn btn-primary" type="submit">Kirish <span class="arr">→</span></button>
+      ${p?`<p class="small muted" style="margin-top:12px">Hozirgi bosqich: <b>${STAGE_TXT[currentStage(p)]||""}</b></p>`:''}
+    </form>
+  </div></section>`;
+  $("#loginForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const code = $("#code").value.trim().toUpperCase();
+    if (!new RegExp(CONFIG.codePattern).test(code)){ $("#codeErr").textContent = "Kod formati noto'g'ri. Masalan: P014"; return; }
+    let cur = state.p;
+    if (!cur || cur.code !== code){
+      const group = CONFIG.design === "two-group" ? (CONFIG.controlCodes.includes(code) ? "nazorat" : "tajriba") : (CONFIG.design === "pre-post" ? "tajriba" : "");
+      cur = { code, group, joined: nowISO(), done: {}, demographics: false };
+      state.p = cur;
+      const c = LS.get("consent", {});
+      logEvent("consent", { value: "agree", item_id: c.parent ? "parent_form:" + c.parent : "", timestamp_utc: c.at || nowISO() });
+    }
+    toast("Xush kelibsiz, " + code);
+    routeNext();
+  });
+}
+
+function routeNext(){
+  const p = state.p; if (!p) return go("#/kirish");
+  const s = currentStage(p);
+  if (s === "demografiya") return go("#/demografiya");
+  if (s === "T0" || s === "T1" || s === "T2") return go("#/testlar");
+  go("#/kundalik");
+}
+
+function viewDemographics(){
+  const p = state.p; if (!p) return go("#/kirish");
+  main.innerHTML = `<section class="sec"><div class="wrap read">
+    <div class="eyebrow">3-qadam</div><h1>Siz haqingizda qisqacha</h1>
+    <p class="muted">Ism so'ralmaydi. Javoblar faqat umumlashtirilgan tahlil uchun.</p>
+    <form class="panel" id="demoForm">
+      <div class="field"><label class="lbl" for="age">Yoshingiz (to'liq yil)</label><input class="inp" id="age" type="number" min="12" max="80" required inputmode="numeric"></div>
+      <div class="field"><label class="lbl" for="gender">Jinsingiz</label><select class="inp" id="gender" required><option value="">Tanlang</option><option>Erkak</option><option>Ayol</option><option value="aytmaslik">Aytishni xohlamayman</option></select></div>
+      <div class="field"><label class="lbl" for="level">Ta'lim bosqichi (kurs yoki sinf)</label><input class="inp" id="level" required placeholder="masalan, 2-kurs yoki 10-sinf"></div>
+      <div class="field"><label class="lbl" for="field">Yo'nalish / mutaxassislik</label><input class="inp" id="field" placeholder="ixtiyoriy"></div>
+      <div class="field"><label class="lbl" for="phone">Smartfoningiz turi</label><select class="inp" id="phone" required><option value="">Tanlang</option><option>Android</option><option>iPhone</option><option>Smartfonim yo'q</option></select></div>
+      <div class="field"><label class="lbl" for="screen">Kunlik ekran vaqti (daqiqa)</label><input class="inp" id="screen" type="number" min="0" max="1440" required inputmode="numeric"><p class="small muted">Telefon sozlamalaridagi "Ekran vaqti" yoki "Digital Wellbeing" bo'limidan oxirgi kunlik o'rtacha raqamni ko'chiring.</p></div>
+      <div class="field"><label class="lbl" for="social">Ijtimoiy tarmoqlarda kunlik vaqt (daqiqa, taxminan)</label><input class="inp" id="social" type="number" min="0" max="1440" inputmode="numeric"></div>
+      <div class="field"><label class="lbl" for="prior">Meditatsiya yoki stress ilovalaridan foydalanganmisiz?</label><select class="inp" id="prior" required><option value="">Tanlang</option><option value="yoq">Yo'q</option><option value="sinab_korgan">Sinab ko'rganman</option><option value="muntazam">Muntazam foydalanaman</option></select></div>
+      <div class="err" id="demoErr" role="alert"></div>
+      <button class="btn btn-primary" type="submit">Saqlash va testlarga o'tish <span class="arr">→</span></button>
+    </form></div></section>`;
+  $("#demoForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const f = e.target; if (!f.checkValidity()){ $("#demoErr").textContent = "Iltimos, majburiy maydonlarni to'ldiring."; f.reportValidity(); return; }
+    ["age","gender","level","field","phone","screen","social","prior"].forEach(k => logEvent("demographics", { item_id: k, value: $("#"+k).value.trim() }));
+    const cur = state.p; cur.demographics = true; state.p = cur;
+    routeNext();
+  });
+}
+
+/* ---------- Questionnaire ---------- */
+let QZ = null;
+function viewTests(){
+  const p = state.p; if (!p) return go("#/kirish");
+  const stage = currentStage(p);
+  if (!["T0","T1","T2"].includes(stage)){
+    const msg = stage === "programme" ? `Yakuniy testlar ${Math.max(0, CONFIG.programDays - daysSince(p.t0Date))} kundan keyin ochiladi. Hozircha mashqlarni davom ettiring.` :
+                stage === "followup-wait" ? `Kuzatuv testlari ${CONFIG.programDays + CONFIG.followUpDays - daysSince(p.t0Date)} kundan keyin ochiladi.` :
+                stage === "demografiya" ? "Avval demografik anketani to'ldiring." : "Hozircha to'ldiriladigan test yo'q.";
+    main.innerHTML = `<section class="sec"><div class="wrap read center"><div class="eyebrow">Testlar</div><h1>${STAGE_TXT[stage]||"Testlar"}</h1><p class="muted">${msg}</p>${resultsListHTML()}<a class="btn btn-primary" href="${stage==='demografiya'?'#/demografiya':'#/mashqlar'}">${stage==='demografiya'?'Anketaga o\'tish':'Mashqlarga o\'tish'} <span class="arr">→</span></a></div></section>`;
+    return;
+  }
+  const list = (CONFIG.battery[stage] || []).filter(k => CONFIG.instruments[k] && CONFIG.instruments[k].enabled);
+  const prog = LS.get("qprog_"+stage, { idx: 0, answers: {} });
+  const doneKeys = (p.doneInstr && p.doneInstr[stage]) || [];
+  const remaining = list.filter(k => !doneKeys.includes(k));
+  if (!remaining.length){ finishStage(stage); return; }
+  const key = remaining[0];
+  QZ = { stage, key, list, pos: list.indexOf(key), i: prog.key === key ? prog.idx : 0, answers: prog.key === key ? prog.answers : {} };
+  renderQuestion();
+}
+function renderQuestion(){
+  const ins = CONFIG.instruments[QZ.key], n = ins.itemCount, i = QZ.i;
+  document.body.classList.add("focus-mode");
+  const sc = ins.responseScale, opts = [];
+  for (let v = sc.min; v <= sc.max; v++) opts.push(v);
+  const many = opts.length > 5;
+  const itemText = ins.items[i] ? esc(ins.items[i]) : `<span class="placeholder-txt">[Savol matni kiritilmagan — ${QZ.key}, ${i+1}-band. CONFIG.instruments.${QZ.key}.items ga asl matnni qo'ying]</span>`;
+  main.innerHTML = `<section class="sec" style="padding-top:32px"><div class="wrap read">
+    <div class="row" style="justify-content:space-between"><div class="eyebrow" style="margin:0">${QZ.stage} · Test ${QZ.pos+1} / ${QZ.list.length}</div><button class="btn btn-ghost btn-sm" id="qExit">Keyinroq davom etaman</button></div>
+    <h2 style="margin-top:8px">${esc(ins.name)}</h2>
+    ${i===0?`<p class="muted small">${ins.instructions.startsWith("[")?`<span class="placeholder-txt">${esc(ins.instructions)}</span>`:esc(ins.instructions)}</p>`:''}
+    <div class="row" style="justify-content:space-between"><span class="small muted" aria-live="polite">${i+1} / ${n}</span></div>
+    <div class="qbar" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${i+1}"><i style="width:${(i)/n*100}%"></i></div>
+    <div class="panel"><p style="font-size:19px;font-weight:500">${itemText}</p>
+      <div class="${many?'scale-row':'opts'}" role="radiogroup" aria-label="Javob">
+        ${opts.map((v,k) => `<button class="opt" role="radio" aria-checked="${QZ.answers[i+1]===v}" data-v="${v}"><span class="num">${v}</span>${!many && sc.labels[k] ? `<span>${esc(sc.labels[k])}</span>` : ''}${!many?'<svg class="chk" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg>':''}</button>`).join("")}
+      </div>
+      <div class="anchors"><span>${esc(sc.minLabel)}</span><span>${esc(sc.maxLabel)}</span></div>
+    </div>
+    <div class="sticky-actions">
+      <button class="btn btn-ghost" id="qBack" ${i===0?'disabled':''}>← Orqaga</button>
+      <button class="btn btn-primary" id="qNext" ${QZ.answers[i+1]===undefined?'disabled':''}>${i===n-1?'Yakunlash':'Keyingi'} <span class="arr">→</span></button>
+    </div></div></section>`;
+  main.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+    QZ.answers[i+1] = +b.dataset.v;
+    LS.set("qprog_"+QZ.stage, { key: QZ.key, idx: QZ.i, answers: QZ.answers });
+    main.querySelectorAll(".opt").forEach(x => x.setAttribute("aria-checked", x===b));
+    $("#qNext").disabled = false;
+    if (!reducedMotion()) setTimeout(() => { if (QZ && QZ.i===i && i<n-1) nextQ(); }, 260);
+  }));
+  $("#qBack").addEventListener("click", () => { QZ.i--; renderQuestion(); });
+  $("#qNext").addEventListener("click", nextQ);
+  $("#qExit").addEventListener("click", () => { document.body.classList.remove("focus-mode"); go("#/kundalik"); });
+  main.focus();
+}
+function nextQ(){
+  const ins = CONFIG.instruments[QZ.key];
+  if (QZ.answers[QZ.i+1] === undefined) return;
+  if (QZ.i < ins.itemCount - 1){ QZ.i++; LS.set("qprog_"+QZ.stage, { key: QZ.key, idx: QZ.i, answers: QZ.answers }); renderQuestion(); return; }
+  // instrument complete
+  const res = scoreInstrument(QZ.key, QZ.answers);
+  for (let k=1;k<=ins.itemCount;k++) logEvent("questionnaire_item", { item_id: `${QZ.key}_${String(k).padStart(2,"0")}`, value: QZ.answers[k], content_id: QZ.key });
+  logEvent("questionnaire_complete", { content_id: QZ.key, value: res.total, item_id: res.band || "", percent: "",
+    answers: JSON.stringify(QZ.answers), subscales: JSON.stringify(res.subscales) });
+  const p = state.p; p.doneInstr = p.doneInstr || {}; p.doneInstr[QZ.stage] = (p.doneInstr[QZ.stage]||[]).concat(QZ.key);
+  p.results = p.results || {}; p.results[QZ.stage+"_"+QZ.key] = { total: res.total, band: res.band, at: nowISO() };
+  state.p = p;
+  LS.del("qprog_"+QZ.stage);
+  showResult(QZ.key, res, QZ.stage);
+}
+function showResult(key, res, stage){
+  const ins = CONFIG.instruments[key];
+  const hasBands = ins.bands && ins.bands.length;
+  const isHigh = hasBands && res.bandIndex === ins.bands.length - 1 && ["PSM25","PSS10","VASS"].includes(key);
+  const range = (()=>{ const sc=ins.responseScale,n=ins.itemCount; if(ins.scoring==="sum") return [sc.min*n, sc.max*n]; if(ins.scoring==="mean") return [sc.min, sc.max]; return [0,100]; })();
+  const pos = Math.min(100, Math.max(0, (res.total - range[0]) / (range[1] - range[0]) * 100));
+  document.body.classList.add("focus-mode");
+  main.innerHTML = `<section class="sec"><div class="wrap read">
+    <div class="eyebrow">Natijam · ${esc(stage)}</div><h1>${esc(ins.name)}</h1>
+    <div class="panel">
+      <div class="row" style="align-items:flex-end;gap:16px"><span class="score-big">${res.total}</span><span class="muted">ball (${range[0]}–${range[1]})</span></div>
+      ${hasBands ? `<div class="bandbar">${ins.bands.map((b,k)=>`<span class="b${Math.min(k,2)}"></span>`).join("")}<span class="marker" style="left:${pos}%"></span></div>
+        <div class="band-labels">${ins.bands.map(b=>`<span>${esc(b.label)}</span>`).join("")}</div>
+        <p style="margin-top:16px">Sizning darajangiz: <b>${esc(res.band)}</b>.</p>`
+      : `<p class="muted" style="margin-top:12px">Natija tadqiqotchi tomonidan izohlanadi.</p>`}
+      ${Object.keys(res.subscales).length ? `<p class="small muted">${Object.entries(res.subscales).map(([k,v])=>`${esc(k)}: <b>${v}</b>`).join(" · ")}</p>`:''}
+    </div>
+    ${isHigh ? `<div class="note warm" style="margin-top:16px"><p><b>Siz hozir ancha zo'riqishni boshdan kechirayotgan bo'lishingiz mumkin.</b> Bu tashxis emas. Shunday paytda ishonchli inson yoki psixolog bilan gaplashish foydali bo'ladi.</p><p class="small" style="margin:0">Bog'lanish: ${esc(CONFIG.contact.psychologist)} · ${esc(CONFIG.contact.phone)}</p></div>`
+      : `<div class="note" style="margin-top:16px"><p style="margin:0">Rahmat! Javoblaringiz saqlandi. Bu natija faqat sizning hozirgi holatingiz haqidagi umumiy ko'rsatkich; u tashxis emas.</p></div>`}
+    <div class="sticky-actions"><span></span><button class="btn btn-primary" id="resNext">Davom etish <span class="arr">→</span></button></div>
+  </div></section>`;
+  $("#resNext").addEventListener("click", () => viewTests());
+}
+function finishStage(stage){
+  const p = state.p; p.done = p.done || {}; p.done[stage] = nowISO();
+  if (stage === "T0") p.t0Date = nowISO();
+  state.p = p; document.body.classList.remove("focus-mode");
+  logEvent("stage_complete", { content_id: stage });
+  main.innerHTML = `<section class="sec"><div class="wrap read center">
+    <div class="eyebrow">${esc(stage)} yakunlandi</div><h1>Rahmat!</h1>
+    <p class="muted">${stage==="T0" ? (exercisesLocked(p) ? `Siz kutish ro'yxati guruhidasiz: ${CONFIG.programDays} kundan keyin testlarni yana to'ldirasiz, so'ng barcha mashqlar ochiladi.` : `Endi ${CONFIG.programDays} kunlik mashqlar davri boshlandi. Haftasiga kamida ${CONFIG.weeklyGoalSessions} marta shug'ullanishga harakat qiling.`) : "Bu bosqichdagi testlar saqlandi."}</p>
+    <div class="row" style="justify-content:center"><a class="btn btn-primary" href="#/mashqlar">Mashqlarga o'tish <span class="arr">→</span></a><button class="btn btn-outline" id="icsBtn">Kalendarga eslatma</button></div>
+  </div></section>`;
+  $("#icsBtn").addEventListener("click", downloadICS);
+}
+function resultsListHTML(){
+  const p = state.p; if (!p || !p.results) return "";
+  const rows = Object.entries(p.results).map(([k,r]) => { const [st,key]=k.split("_"); const ins=CONFIG.instruments[key]; return `<li><span>${esc(st)} · ${esc(ins?ins.name:key)}</span><b>${r.total}${r.band?' · '+esc(r.band):''}</b></li>`; }).join("");
+  return `<div class="panel" style="text-align:left;margin:20px 0"><h3>Mening natijalarim</h3><ul class="hist">${rows}</ul></div>`;
+}
+
+/* ---------- Exercises list ---------- */
+function viewExercises(){
+  const p = state.p;
+  const tags = ["Barchasi","Tinchlanish","Uyqu","Diqqat","Imtihon oldidan","Tana"];
+  const durs = [["any","Har qanday davomiylik"],["short","3–5 daqiqa"],["long","10+ daqiqa"]];
+  const f = LS.get("filters", { tag:"Barchasi", dur:"any" });
+  const list = EXERCISES.filter(e => (f.tag==="Barchasi"||e.tag===f.tag) && (f.dur==="any" || (f.dur==="short"?e.min<=5:e.min>=10)));
+  main.innerHTML = `<section class="sec"><div class="wrap">
+    <div class="sec-head"><div class="eyebrow">${EXERCISES.length} ta mashq</div><h1>Mashqlar</h1><p>Har bir mashq ilmiy adabiyotda o'rganilgan usulga asoslanadi. "i" belgisini bosib, ilmiy asosni ko'ring.</p></div>
+    ${exercisesLocked(p) ? `<div class="note warm" style="margin-bottom:24px"><p style="margin:0">Siz kutish ro'yxati guruhidasiz. Mashqlar yakuniy testlardan keyin ochiladi. Bu tadqiqot natijalarini adolatli solishtirish uchun kerak.</p></div>` : ""}
+    <div class="chips" role="group" aria-label="Maqsad bo'yicha saralash">${tags.map(t=>`<button class="chip" data-tag="${t}" aria-pressed="${f.tag===t}">${t}</button>`).join("")}</div>
+    <div class="chips" role="group" aria-label="Davomiylik bo'yicha saralash">${durs.map(([k,t])=>`<button class="chip" data-dur="${k}" aria-pressed="${f.dur===k}">${t}</button>`).join("")}</div>
+    <div class="grid g3">${list.map(exerciseCard).join("") || `<p class="muted">Bu filtr bo'yicha mashq topilmadi.</p>`}</div>
+  </div></section>`;
+  main.querySelectorAll("[data-tag]").forEach(b => b.addEventListener("click", () => { f.tag = b.dataset.tag; LS.set("filters", f); viewExercises(); }));
+  main.querySelectorAll("[data-dur]").forEach(b => b.addEventListener("click", () => { f.dur = b.dataset.dur; LS.set("filters", f); viewExercises(); }));
+  if (exercisesLocked(p)) main.querySelectorAll(".card .btn-primary").forEach(a => { a.removeAttribute("href"); a.setAttribute("aria-disabled","true"); a.classList.add("btn-outline"); a.classList.remove("btn-primary"); a.textContent = "Yopiq"; });
+  observeReveal();
+}
+
+/* ---------- Player ---------- */
+let PL = null;
+function stopPlayer(){ if (PL){ clearInterval(PL.tick); clearTimeout(PL.phaseT); PL = null; } }
+function viewPlayer(id){
+  const ex = EXERCISES.find(e => e.id === id); if (!ex) return go("#/mashqlar");
+  const p = state.p;
+  if (exercisesLocked(p)){ toast("Mashqlar yakuniy testlardan keyin ochiladi"); return go("#/mashqlar"); }
+  document.body.classList.add("focus-mode");
+  main.innerHTML = `<section class="player">
+    <div class="aurora"></div>
+    <div class="player-top"><button class="btn btn-ghost btn-sm" id="plExit">← Chiqish</button><span class="small muted">${esc(ex.tag)} · ${ex.min} daqiqa</span></div>
+    <div class="eyebrow">${esc(ex.tag)}</div><h1 style="max-width:640px">${esc(ex.title)}</h1>
+    <p class="muted" style="max-width:520px">${esc(ex.purpose)}</p>
+    <div class="mood panel" style="margin-top:16px">
+      <label class="lbl" for="moodB">Hozir o'zingizni qanday his qilyapsiz?</label>
+      <div class="mood-val center" id="moodBv">5</div>
+      <input type="range" id="moodB" min="1" max="10" value="5" aria-describedby="moodEnds">
+      <div class="mood-ends" id="moodEnds"><span>Juda tarang</span><span>Juda xotirjam</span></div>
+      <button class="btn btn-calm" id="plStart" style="margin-top:16px;width:100%">Boshlash</button>
+    </div>
+    <p class="safety" style="margin-top:20px">Bosh aylansa yoki noqulay his qilsangiz, mashqni to'xtating. Mashqlar tibbiy yoki psixologik yordam o'rnini bosmaydi.</p>
+  </section>`;
+  $("#moodB").addEventListener("input", e => $("#moodBv").textContent = e.target.value);
+  $("#plExit").addEventListener("click", () => { stopPlayer(); document.body.classList.remove("focus-mode"); go("#/mashqlar"); });
+  $("#plStart").addEventListener("click", () => {
+    const mood = +$("#moodB").value;
+    logEvent("mood_before", { content_id: ex.id, value: mood });
+    logEvent("exercise_start", { content_id: ex.id });
+    if (ex.type === "journal") runJournal(ex); else runSession(ex);
+  });
+}
+function runSession(ex){
+  const total = ex.min * 60;
+  const R = 2*Math.PI*48;
+  main.innerHTML = `<section class="player ${reducedMotion()?'reduced':''}">
+    <div class="aurora"></div>
+    <div class="player-top"><button class="btn btn-ghost btn-sm" id="plStop">← To'xtatish</button><span class="ptimer" id="plTime">${fmtTime(total)}</span></div>
+    <div class="breath-wrap">
+      <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="track" cx="50" cy="50" r="48"/><circle class="prog" id="plRing" cx="50" cy="50" r="48" stroke-dasharray="${R}" stroke-dashoffset="${R}"/></svg>
+      <div class="orb" id="orb"></div>
+    </div>
+    <div class="phase" id="phase" aria-live="polite"></div>
+    <p class="guide" id="guide" aria-live="polite"></p>
+    <div class="row" style="justify-content:center"><button class="btn btn-outline" id="plPause">Pauza</button><button class="btn btn-ghost" id="plSound" aria-pressed="false">Ovozli signal: o'chiq</button></div>
+  </section>`;
+  PL = { ex, total, elapsed: 0, paused: false, sound: false, startedAt: Date.now() };
+  const ring = $("#plRing"), orb = $("#orb"), phase = $("#phase"), guide = $("#guide");
+  const chime = () => { if (!PL.sound) return; try{ const a = new (window.AudioContext||window.webkitAudioContext)(); const o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.value=528; g.gain.setValueAtTime(.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(.12,a.currentTime+.05); g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+1.2); o.connect(g).connect(a.destination); o.start(); o.stop(a.currentTime+1.3);}catch(e){} };
+  // breath mode
+  if (ex.type === "breath"){
+    const [inh, hold, exh, hold2] = ex.pattern;
+    const names = [["Nafas oling", inh, 1], ["Ushlab turing", hold, 1], ["Chiqaring", exh, .62], ["Kuting", hold2, .62]].filter(x => x[1] > 0);
+    let k = 0;
+    const intro = ex.intro || [];
+    guide.textContent = intro[0] || "";
+    const step = () => {
+      if (!PL || PL.paused) return;
+      const [nm, sec, scale] = names[k % names.length];
+      phase.textContent = `${nm} · ${sec}`;
+      orb.style.transitionDuration = sec + "s"; orb.style.transform = `scale(${scale})`;
+      chime();
+      const introIdx = Math.floor(PL.elapsed / 20); if (intro[introIdx]) guide.textContent = intro[introIdx];
+      k++; PL.phaseT = setTimeout(step, sec * 1000);
+    };
+    PL.step = step;
+    step();
+  } else {
+    const steps = ex.steps, per = total / steps.length;
+    PL.stepIdx = -1;
+    PL.onTick = () => {
+      const idx = Math.min(steps.length - 1, Math.floor(PL.elapsed / per));
+      if (idx !== PL.stepIdx){ PL.stepIdx = idx; guide.textContent = steps[idx]; phase.textContent = `${idx+1} / ${steps.length}`; chime(); }
+      const breathe = Math.floor(PL.elapsed) % 10 < 4; orb.style.transitionDuration = "4s"; orb.style.transform = `scale(${breathe ? 1 : .7})`;
+    };
+  }
+  PL.tick = setInterval(() => {
+    if (!PL || PL.paused) return;
+    PL.elapsed += 1;
+    ring.style.strokeDashoffset = R * (1 - PL.elapsed / total);
+    $("#plTime").textContent = fmtTime(total - PL.elapsed);
+    if (PL.onTick) PL.onTick();
+    if (PL.elapsed >= total) endSession(ex, true);
+  }, 1000);
+  if (PL.onTick) PL.onTick();
+  $("#plPause").addEventListener("click", e => {
+    PL.paused = !PL.paused; e.target.textContent = PL.paused ? "Davom etish" : "Pauza";
+    if (PL.paused) clearTimeout(PL.phaseT); else if (PL.step) PL.step();
+  });
+  $("#plSound").addEventListener("click", e => { PL.sound = !PL.sound; e.target.setAttribute("aria-pressed", PL.sound); e.target.textContent = "Ovozli signal: " + (PL.sound ? "yoqiq" : "o'chiq"); });
+  $("#plStop").addEventListener("click", () => endSession(ex, false));
+}
+function runJournal(ex){
+  main.innerHTML = `<section class="sec"><div class="wrap read journal">
+    <div class="eyebrow">${esc(ex.tag)} · ${ex.min} daqiqa</div><h1>${esc(ex.title)}</h1>
+    <p class="muted">Yozganlaringiz faqat shu qurilmada qoladi va tadqiqotchiga yuborilmaydi.</p>
+    <form id="jForm" class="stack">${ex.prompts.map((q,i)=>`<div><label class="lbl" for="j${i}">${i+1}. ${esc(q)}</label><textarea id="j${i}"></textarea></div>`).join("")}
+    <div class="row" style="justify-content:space-between"><button type="button" class="btn btn-ghost" id="jCancel">← Chiqish</button><button class="btn btn-primary">Yakunlash <span class="arr">→</span></button></div></form>
+  </div></section>`;
+  PL = { startedAt: Date.now(), elapsed: 0 };
+  $("#jCancel").addEventListener("click", () => endSession(ex, false));
+  $("#jForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const entries = ex.prompts.map((_,i) => $("#j"+i).value.trim());
+    const j = LS.get("journal", []); j.push({ at: nowISO(), ex: ex.id, entries }); LS.set("journal", j);
+    PL.elapsed = Math.round((Date.now() - PL.startedAt)/1000);
+    logEvent("journal_saved", { content_id: ex.id, value: entries.filter(Boolean).length });   // matn yuborilmaydi
+    endSession(ex, true);
+  });
+}
+function endSession(ex, completedFlag){
+  const elapsed = PL ? (PL.elapsed || Math.round((Date.now()-PL.startedAt)/1000)) : 0;
+  stopPlayer();
+  logEvent(completedFlag ? "exercise_complete" : "exercise_stopped", { content_id: ex.id, duration_sec: elapsed, percent: Math.round(Math.min(100, elapsed / (ex.min*60) * 100)) });
+  main.innerHTML = `<section class="player"><div class="aurora"></div>
+    <div class="eyebrow">${completedFlag ? "Mashq yakunlandi" : "Mashq to'xtatildi"}</div><h1>${completedFlag ? "Yaxshi ish!" : "Hech qisi yo'q"}</h1>
+    <p class="muted">${completedFlag ? esc(ex.outro || "Bir lahza tanangizda nima o'zgarganini kuzating.") : "Keyingi safar davom ettirishingiz mumkin."}</p>
+    <div class="mood panel" style="margin-top:16px">
+      <label class="lbl" for="moodA">Hozir o'zingizni qanday his qilyapsiz?</label>
+      <div class="mood-val center" id="moodAv">5</div>
+      <input type="range" id="moodA" min="1" max="10" value="5">
+      <div class="mood-ends"><span>Juda tarang</span><span>Juda xotirjam</span></div>
+      <button class="btn btn-primary" id="moodSave" style="margin-top:16px;width:100%">Saqlash</button>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="techIssue" style="margin-top:12px">Texnik muammo bo'ldimi?</button>
+  </section>`;
+  $("#moodA").addEventListener("input", e => $("#moodAv").textContent = e.target.value);
+  $("#moodSave").addEventListener("click", () => { logEvent("mood_after", { content_id: ex.id, value: +$("#moodA").value }); document.body.classList.remove("focus-mode"); toast("Saqlandi"); go("#/kundalik"); });
+  $("#techIssue").addEventListener("click", () => { const t = prompt("Muammoni qisqacha yozing (shaxsiy ma'lumot yozmang):"); if (t){ logEvent("technical_issue", { content_id: ex.id, value: t.slice(0,300) }); toast("Rahmat, qayd etildi"); } });
+}
+
+/* ---------- Videos ---------- */
+let YTready = null;
+function loadYT(){ if (YTready) return YTready; YTready = new Promise(res => { window.onYouTubeIframeAPIReady = () => res(window.YT); const s=document.createElement("script"); s.src="https://www.youtube.com/iframe_api"; s.onerror=()=>res(null); document.head.appendChild(s); setTimeout(()=>res(window.YT||null),8000); }); return YTready; }
+function viewVideos(){
+  const p = state.p;
+  main.innerHTML = `<section class="sec"><div class="wrap">
+    <div class="sec-head"><div class="eyebrow">${CONFIG.videos.length} ta video</div><h1>Videolar</h1><p>Videolarni ko'rganingiz avtomatik qayd etiladi. "Tez orada" belgisi bor videolar hali joylanmagan.</p></div>
+    ${exercisesLocked(p) ? `<div class="note warm" style="margin-bottom:24px"><p style="margin:0">Videolar yakuniy testlardan keyin ochiladi.</p></div>`:""}
+    <div class="grid g3">${CONFIG.videos.map(videoCard).join("")}</div></div></section>`;
+  main.querySelectorAll("[data-play]").forEach(b => b.addEventListener("click", () => { if (exercisesLocked(p)) return toast("Videolar yakuniy testlardan keyin ochiladi"); playVideo(b.dataset.play); }));
+  observeReveal();
+}
+function saveVProg(id, pct){ const vp = LS.get("vprog", {}); if (pct > (vp[id]||0)){ vp[id] = pct; LS.set("vprog", vp); } }
+async function playVideo(id){
+  const v = CONFIG.videos.find(x => x.id === id); const card = main.querySelector(`[data-vid="${id}"] .vthumb`);
+  const marks = new Set(); let watched = 0, last = null;
+  const report = (cur, dur) => {
+    if (!dur) return; const pct = Math.round(cur / dur * 100); saveVProg(id, pct);
+    [25,50,75,90,100].forEach(m => { if (pct >= m && !marks.has(m)){ marks.add(m); logEvent("video_progress", { content_id: id, percent: m, duration_sec: Math.round(watched) }); if (m===90) logEvent("video_complete", { content_id: id, duration_sec: Math.round(watched) }); } });
+    const bar = main.querySelector(`[data-vid="${id}"] .vprog i`); if (bar) bar.style.width = Math.min(100,pct) + "%";
+  };
+  logEvent("video_start", { content_id: id });
+  if (/\.(mp4|webm)(\?|$)/i.test(v.src)){
+    card.innerHTML = `<video class="vframe" src="${esc(v.src)}" controls playsinline autoplay></video>`;
+    const el = card.querySelector("video");
+    el.addEventListener("timeupdate", () => { const t = el.currentTime; if (last!==null && t>last && t-last<2) watched += t-last; last = t; report(t, el.duration); });
+    el.addEventListener("pause", () => logEvent("video_pause", { content_id: id, duration_sec: Math.round(watched) }));
+  } else {
+    card.innerHTML = `<div class="vframe skel" id="yt_${id}"></div>`;
+    const YT = await loadYT();
+    if (!YT || !YT.Player){ card.innerHTML = `<iframe class="vframe" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.src)}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen title="${esc(v.title)}"></iframe>`; return; }
+    const pl = new YT.Player("yt_"+id, { host: "https://www.youtube-nocookie.com", videoId: v.src, playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+      events: { onStateChange: e => { if (e.data === 2) logEvent("video_pause", { content_id: id, duration_sec: Math.round(watched) }); } } });
+    const iv = setInterval(() => { try{ if (!document.body.contains(card)) return clearInterval(iv); if (pl.getPlayerState && pl.getPlayerState() === 1){ const t = pl.getCurrentTime(); if (last!==null && t>last && t-last<2) watched += t-last; last = t; report(t, pl.getDuration()); } }catch(e){} }, 1000);
+  }
+}
+
+/* ---------- Dashboard ---------- */
+function viewDashboard(){
+  const p = state.p;
+  if (!p){ main.innerHTML = `<section class="sec"><div class="wrap read center"><h1>Mening kundaligim</h1><p class="muted">Kundalikni ko'rish uchun tadqiqotga qo'shiling.</p><a class="btn btn-primary" href="#/rozilik">Ishtirok etish <span class="arr">→</span></a></div></section>`; return; }
+  const ev = LS.get("events", []).filter(e => e.participant_code === p.code);
+  const done = ev.filter(e => e.event_type === "exercise_complete" || e.event_type === "video_complete");
+  const minutes = Math.round(ev.filter(e => ["exercise_complete","exercise_stopped"].includes(e.event_type)).reduce((a,e)=>a+(+e.duration_sec||0),0)/60);
+  const days = [...new Set(done.map(e => e.timestamp_utc.slice(0,10)))].sort();
+  let streak = 0; { let d = new Date(); for(;;){ const k = d.toISOString().slice(0,10); if (days.includes(k)){ streak++; d.setDate(d.getDate()-1); } else break; } }
+  const weekAgo = Date.now() - 7*86400000; const weekCount = done.filter(e => new Date(e.timestamp_utc) > weekAgo).length;
+  const goal = CONFIG.weeklyGoalSessions, pct = Math.min(1, weekCount/goal);
+  const mb = ev.filter(e=>e.event_type==="mood_before").map(e=>+e.value), ma = ev.filter(e=>e.event_type==="mood_after").map(e=>+e.value);
+  const avg = a => a.length ? (a.reduce((x,y)=>x+y,0)/a.length) : null;
+  const diff = (avg(ma)!==null && avg(mb)!==null) ? (avg(ma)-avg(mb)).toFixed(1) : "—";
+  const dayN = p.t0Date ? Math.min(CONFIG.programDays, daysSince(p.t0Date)+1) : 0;
+  const pairs = ma.slice(-10);
+  const spark = pairs.length > 1 ? `<svg viewBox="0 0 120 40" width="100%" height="48" aria-hidden="true"><polyline fill="none" stroke="var(--calm)" stroke-width="2.5" stroke-linecap="round" points="${pairs.map((v,i)=>`${i*(120/(pairs.length-1))},${40-(v/10)*36}`).join(" ")}"/></svg>` : `<p class="small muted">Kamida 2 ta mashqdan keyin grafik paydo bo'ladi.</p>`;
+  const C = 2*Math.PI*42;
+  const stage = currentStage(p);
+  const recent = ev.filter(e => ["exercise_complete","video_complete","questionnaire_complete"].includes(e.event_type)).slice(-6).reverse();
+  const nameOf = id => (EXERCISES.find(x=>x.id===id)||CONFIG.videos.find(x=>x.id===id)||{title: (CONFIG.instruments[id]||{}).name || id}).title;
+  main.innerHTML = `<section class="sec"><div class="wrap">
+    <div class="sec-head row" style="justify-content:space-between;align-items:flex-end"><div><div class="eyebrow">${esc(p.code)} · ${STAGE_TXT[stage]||""}</div><h1>Mening kundaligim</h1></div>
+      ${["T0","T1","T2","demografiya"].includes(stage) ? `<button class="btn btn-primary" id="dashNext">${stage==="demografiya"?"Anketani to'ldirish":"Testlarni to'ldirish"} <span class="arr">→</span></button>` : `<a class="btn btn-primary" href="#/mashqlar">Mashq boshlash <span class="arr">→</span></a>`}</div>
+    <div class="bento">
+      <div class="tile"><div class="k">Dastur kuni</div><div class="v">${dayN || "—"}<span class="small muted"> / ${CONFIG.programDays}</span></div></div>
+      <div class="tile"><div class="k">Mashg'ulotlar</div><div class="v">${done.length}</div></div>
+      <div class="tile"><div class="k">Jami daqiqa</div><div class="v">${minutes}</div></div>
+      <div class="tile"><div class="k">Ketma-ket kunlar</div><div class="v">${streak}</div></div>
+      <div class="tile wide"><div class="k">Haftalik maqsad</div>
+        <div class="ringwrap" style="margin-top:10px"><svg class="prog-ring" width="110" height="110" viewBox="0 0 100 100" role="img" aria-label="Haftalik maqsad: ${weekCount} / ${goal}"><circle cx="50" cy="50" r="42" stroke="var(--border)"/><circle cx="50" cy="50" r="42" stroke="var(--accent)" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}" transform="rotate(-90 50 50)"/><text x="50" y="56" text-anchor="middle" font-family="Fraunces, serif" font-size="22" fill="var(--text)">${weekCount}/${goal}</text></svg>
+        <p class="muted small" style="margin:0">So'nggi 7 kunda ${weekCount} ta mashg'ulot. Maqsad – haftasiga ${goal} ta. Har bir kichik qadam ham hisobga olinadi.</p></div></div>
+      <div class="tile wide"><div class="k">Kayfiyat (mashqdan keyin)</div>${spark}<p class="small muted" style="margin:0">Mashqdan oldin va keyingi o'rtacha farq: <b>${diff}</b> ball</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:24px">
+      <div class="panel"><h3>So'nggi faoliyat</h3><ul class="hist">${recent.map(e=>`<li><span>${esc(nameOf(e.content_id))}</span><span class="muted small">${new Date(e.timestamp_utc).toLocaleDateString("uz-UZ")}</span></li>`).join("") || '<li class="muted">Hali faoliyat yo\'q</li>'}</ul></div>
+      <div class="panel"><h3>Sozlamalar</h3>
+        <div class="stack"><button class="btn btn-outline" id="icsBtn">Kalendarga kundalik eslatma (.ics)</button>
+        ${resultsListHTML()}
+        <button class="btn btn-ghost" id="withdrawBtn" style="color:var(--alert)">Ishtirokni to'xtatish</button>
+        <p class="small muted">${LS.get("queue",[]).length ? `Yuborilishi kutilayotgan yozuvlar: ${LS.get("queue",[]).length}. Internet ulanganda avtomatik yuboriladi.` : "Barcha ma'lumotlar yuborilgan."}</p></div></div>
+    </div></div></section>`;
+  $("#icsBtn").addEventListener("click", downloadICS);
+  const dn = $("#dashNext"); if (dn) dn.addEventListener("click", routeNext);
+  $("#withdrawBtn").addEventListener("click", () => {
+    if (!confirm("Ishtirokni to'xtatmoqchimisiz? Bundan keyin sizga eslatmalar ko'rsatilmaydi.")) return;
+    logEvent("withdrawal", { value: "participant_request" });
+    const cur = state.p; cur.withdrawn = nowISO(); state.p = cur;
+    main.innerHTML = `<section class="sec"><div class="wrap read center"><h1>Ishtirokingiz to'xtatildi</h1><p class="muted">Rahmat. Agar avval yuborilgan ma'lumotlaringiz o'chirilishini istasangiz, kodingizni ko'rsatib tadqiqotchiga murojaat qiling: ${esc(CONFIG.contact.email)}.</p></div></section>`;
+  });
+}
+
+function downloadICS(){
+  const start = new Date(); start.setDate(start.getDate()+1); start.setHours(20,0,0,0);
+  const dt = d => d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+  const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//SokinNafas//UZ","BEGIN:VEVENT","UID:"+Date.now()+"@sokinnafas","DTSTAMP:"+dt(new Date()),"DTSTART:"+dt(start),"DURATION:PT10M",
+    "RRULE:FREQ=DAILY;COUNT="+CONFIG.programDays,"SUMMARY:"+CONFIG.siteName+": 10 daqiqalik mashq","DESCRIPTION:Bugungi mashqingizni bajaring: "+location.href.split("#")[0],"BEGIN:VALARM","TRIGGER:-PT0M","ACTION:DISPLAY","DESCRIPTION:Mashq vaqti","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([ics], {type:"text/calendar"})); a.download = "eslatma.ics"; a.click();
+}
+
+/* ---------- Static pages ---------- */
+function viewPrivacy(){ main.innerHTML = `<section class="sec"><div class="wrap read"><h1>Maxfiylik</h1><div class="panel stack">
+  <p>Platforma faqat anonim ishtirokchi kodi, testlarga javoblar, mashq va videolar statistikasi hamda mashqdan oldin va keyingi kayfiyat bahosini to'playdi.</p>
+  <p>Ism, telefon, manzil, tashxis yoki dori-darmon haqida ma'lumot so'ralmaydi. Kundalik mashqlaridagi yozuvlar faqat qurilmangizda saqlanadi.</p>
+  <p>Ma'lumotlar tadqiqotchining himoyalangan Google jadvalida saqlanadi va faqat tadqiqotchi hamda ilmiy rahbar ko'radi. Uchinchi tomon kuzatuv tizimlari, reklama va cookie fayllari ishlatilmaydi.</p>
+  <p>Ma'lumotlaringizni o'chirishni so'rash uchun kodingiz bilan murojaat qiling: ${esc(CONFIG.contact.email)}.</p></div></div></section>`; }
+function viewContact(){ main.innerHTML = `<section class="sec"><div class="wrap read"><h1>Bog'lanish</h1><div class="panel stack"><p><b>Tadqiqotchi:</b> ${esc(CONFIG.ownerLine)}</p><p>${esc(CONFIG.supervisorLine)}</p><p>Telefon: ${esc(CONFIG.contact.phone)}<br>E-pochta: ${esc(CONFIG.contact.email)}</p><p>Psixologik yordam: ${esc(CONFIG.contact.psychologist)}</p></div></div></section>`; }
+
+/* ---------- Admin ---------- */
+function viewAdmin(){
+  main.innerHTML = `<section class="sec"><div class="wrap">
+    <div class="eyebrow">Faqat tadqiqotchi uchun</div><h1>Admin panel</h1>
+    <p class="muted">Haqiqiy himoya Google jadvalining ruxsatlarida. Token Apps Script sozlamalarida saqlanadi (README, 2-qadam).</p>
+    <form class="panel row" id="adminForm" style="align-items:flex-end"><div style="flex:1;min-width:220px"><label class="lbl" for="tok">Admin token</label><input class="inp" id="tok" type="password" autocomplete="off"></div><button class="btn btn-primary">Yuklash</button></form>
+    <div id="adminOut" style="margin-top:24px"></div></div></section>`;
+  $("#adminForm").addEventListener("submit", async e => {
+    e.preventDefault(); const out = $("#adminOut"); const tok = $("#tok").value.trim();
+    if (!CONFIG.apiUrl){ out.innerHTML = `<div class="note warm"><p style="margin:0">CONFIG.apiUrl bo'sh. Quyida faqat shu qurilmadagi yozuvlar ko'rsatilgan.</p></div>` + adminTable(LS.get("events", []), null); bindExport(LS.get("events", [])); return; }
+    out.innerHTML = `<div class="bento">${[1,2,3,4].map(()=>'<div class="tile skel" style="height:110px"></div>').join("")}</div>`;
+    try{
+      const r = await fetch(CONFIG.apiUrl + "?action=summary&token=" + encodeURIComponent(tok)); const j = await r.json();
+      if (!j.ok) throw new Error(j.error || "Xato");
+      out.innerHTML = `<div class="bento">
+        <div class="tile"><div class="k">Ishtirokchilar</div><div class="v">${j.participants}</div></div>
+        <div class="tile"><div class="k">T0 yakunlagan</div><div class="v">${j.stages.T0||0}</div></div>
+        <div class="tile"><div class="k">T1 yakunlagan</div><div class="v">${j.stages.T1||0}</div></div>
+        <div class="tile"><div class="k">Mashg'ulotlar</div><div class="v">${j.sessions}</div></div></div>
+        <div class="panel" style="margin-top:16px"><h3>Ishtirokchilar bo'yicha</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Kod</th><th>Guruh</th><th>Bosqich</th><th>Mashg'ulot</th><th>Daqiqa</th><th>Oxirgi faollik</th></tr></thead><tbody>
+        ${(j.byParticipant||[]).map(r=>`<tr><td>${esc(r.code)}</td><td>${esc(r.group)}</td><td>${esc(r.stage)}</td><td>${r.sessions}</td><td>${r.minutes}</td><td>${esc(r.last)}</td></tr>`).join("")}</tbody></table></div>
+        <p style="margin-top:16px"><a class="btn btn-outline" href="${CONFIG.apiUrl}?action=export&token=${encodeURIComponent(tok)}" target="_blank" rel="noopener">Barcha ma'lumotlarni CSV yuklab olish</a></p></div>`;
+    }catch(err){ out.innerHTML = `<div class="note warm"><p style="margin:0">Yuklab bo'lmadi: ${esc(err.message)}. Token va apiUrl ni tekshiring.</p></div>`; }
+  });
+}
+function adminTable(rows){ const cols = ["timestamp_utc","participant_code","stage","event_type","item_id","value","content_id","duration_sec","percent"];
+  return `<div class="panel"><div class="row" style="justify-content:space-between"><h3>Mahalliy yozuvlar (${rows.length})</h3><button class="btn btn-outline btn-sm" id="expLocal">CSV</button></div><div class="tbl-wrap"><table class="tbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.slice(-300).reverse().map(r=>`<tr>${cols.map(c=>`<td>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>`; }
+function bindExport(rows){ const b = $("#expLocal"); if (!b) return; b.addEventListener("click", () => { const cols = Object.keys(rows[0]||{timestamp_utc:1}); const csv = [cols.join(",")].concat(rows.map(r=>cols.map(c=>`"${String(r[c]??"").replace(/"/g,'""')}"`).join(","))).join("\n"); const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"})); a.download="sokin_nafas_mahalliy.csv"; a.click(); }); }
+
+/* ---------- Styleguide (?styleguide=1) ---------- */
+function viewStyleguide(){
+  const sw = ["--bg","--surface","--surface-warm","--text","--text-muted","--border","--accent","--accent-soft","--calm","--calm-soft","--info","--info-soft","--warn","--alert"];
+  main.innerHTML = `<section class="sec"><div class="wrap stack">
+    <div class="eyebrow">Dizayn tizimi</div><h1>Styleguide</h1>
+    <div class="grid g4">${sw.map(v=>`<div class="tile"><div style="height:56px;border-radius:12px;background:var(${v});border:1px solid var(--border)"></div><div class="small" style="margin-top:8px">${v}</div></div>`).join("")}</div>
+    <h1>Sarlavha H1 — Fraunces</h1><h2>Sarlavha H2</h2><h3>Sarlavha H3</h3><p>Asosiy matn Inter. Oʻzbekiston, gʻoya, taʼsir — maxsus belgilar tekshiruvi.</p><div class="eyebrow">Eyebrow yorlig'i</div>
+    <div class="row"><button class="btn btn-primary">Asosiy</button><button class="btn btn-outline">Ikkilamchi</button><button class="btn btn-ghost">Ghost →</button><button class="btn btn-calm">Calm</button><button class="btn btn-primary" disabled>O'chiq</button><button class="btn btn-primary"><span class="spinner"></span> Yuklanmoqda</button><button class="btn btn-primary btn-sm">Kichik</button></div>
+    <nav class="seg"><button aria-pressed="true">Mashqlar</button><button>Videolar</button><button>Testlar</button></nav>
+    <div class="chips"><button class="chip" aria-pressed="true">Tinchlanish</button><button class="chip">Uyqu</button></div>
+    <div class="grid g3">${exerciseCard(EXERCISES[0])}${videoCard(CONFIG.videos[0],0)}<div class="tile"><div class="k">Plitka</div><div class="v">42</div></div></div>
+    <div class="opts" role="radiogroup"><button class="opt" aria-checked="true"><span class="num">1</span>Tanlangan javob</button><button class="opt" aria-checked="false"><span class="num">2</span>Oddiy javob</button></div>
+    <div class="note">Tinch eslatma bloki</div><div class="note warm">Iliq eslatma bloki</div>
+    <div class="panel"><div class="score-big">72</div><div class="bandbar"><span class="b0"></span><span class="b1"></span><span class="b2"></span><span class="marker" style="left:55%"></span></div><div class="band-labels"><span>Past</span><span>O'rtacha</span><span>Yuqori</span></div></div>
+  </div></section>`;
+  observeReveal();
+}
+
+/* =========================================================
+   ROUTER, THEME, MISC
+   ========================================================= */
+function observeReveal(){
+  const els = main.querySelectorAll(".reveal:not(.in)");
+  if (reducedMotion() || !("IntersectionObserver" in window)){ els.forEach(e => e.classList.add("in")); return; }
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold: .08 });
+  els.forEach(e => io.observe(e));
+  setTimeout(() => els.forEach(e => e.classList.add("in")), 1800); // zaxira: hech qachon yashirin qolmasin
+}
+function updateChrome(path){
+  const p = state.p;
+  $("#stagePill").textContent = p ? `${p.code} · ${STAGE_TXT[currentStage(p)]||""}` : "";
+  $("#startBtn").textContent = p ? "Kundalik" : "Boshlash"; $("#startBtn").setAttribute("href", p ? "#/kundalik" : "#/rozilik");
+  $("#loginLink").classList.toggle("hidden", !!p);
+  document.querySelectorAll("[data-go]").forEach(b => { const on = b.dataset.go === "#"+path || (path==="/" && b.dataset.go==="#/"); b.setAttribute(b.closest(".tabbar")?"aria-current":"aria-pressed", on ? (b.closest(".tabbar")?"page":"true") : "false"); });
+}
+const ROUTES = { "/": viewHome, "/rozilik": viewConsent, "/kirish": viewLogin, "/demografiya": viewDemographics, "/testlar": viewTests,
+  "/mashqlar": viewExercises, "/videolar": viewVideos, "/kundalik": viewDashboard, "/maxfiylik": viewPrivacy, "/boglanish": viewContact, "/admin": viewAdmin, "/styleguide": viewStyleguide };
+function render(){
+  stopPlayer();
+  const qs = new URLSearchParams(location.search);
+  let path = (location.hash.replace(/^#/, "") || "/");
+  if (qs.get("styleguide") === "1" && path === "/") path = "/styleguide";
+  if (qs.get("admin") === "1" && path === "/") path = "/admin";
+  document.body.classList.remove("focus-mode");
+  const m = path.match(/^\/mashq\/(EX\d+)$/);
+  const fn = m ? () => viewPlayer(m[1]) : (ROUTES[path] || viewHome);
+  const run = () => { fn(); updateChrome(path); observeReveal(); window.scrollTo(0,0); };
+  if (document.startViewTransition && !reducedMotion()) document.startViewTransition(run); else run();
+}
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+window.addEventListener("hashchange", render);
+window.addEventListener("scroll", () => $("#hdr").classList.toggle("scrolled", window.scrollY > 8), { passive: true });
+// Theme
+(function(){
+  const saved = LS.get("theme", null);
+  const apply = t => { document.documentElement.setAttribute("data-theme", t); document.querySelectorAll('meta[name="theme-color"]').forEach(m=>m.setAttribute("content", t==="dark"?"#1E1F26":"#FFFCFA")); };
+  apply(saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  $("#themeBtn").addEventListener("click", () => { const t = document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark"; apply(t); LS.set("theme", t); });
+})();
+document.querySelectorAll("[data-cfg]").forEach(el => el.textContent = CONFIG[el.dataset.cfg] || "");
+$("#yearNow").textContent = new Date().getFullYear();
+render(); flushQueue();
+</script>
+</body>
+</html>
